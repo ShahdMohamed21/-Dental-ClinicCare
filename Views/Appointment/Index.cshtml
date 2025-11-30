@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Final_project.Models.Appointments>
+@{
+    ViewData["Title"] = "Appointments List";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+      
+
+        <a asp-controller="Appointment" asp-action="Book" class="btn btn-success rounded-pill px-4 mt-2 mt-md-0">
+            <i class="bi bi-plus-circle me-1"></i> Add Appointment
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
+            <table class="styled-table table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#ID</th>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Date & Time</th>
+                        <th>Payment</th>
+                        <th>Services</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.App_ID</td>
+                            <td>@item.Patient?.fullName</td>
+                            <td>@item.Doctor?.Name</td>
+                            <td>@item.AppointmentDate.ToString("yyyy-MM-dd") @item.AppointmentTime.ToString(@"hh\:mm")</td>
+                            <td>@item.PaymentMethod</td>
+                            <td>
+                                @if (item.AppointmentServices != null && item.AppointmentServices.Any())
+                                {
+                                    @foreach (var s in item.AppointmentServices)
+                                    {
+                                        <span class="badge bg-primary m-1">@s.Service?.Name</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <span class="badge @(item.Status == "Confirmed" ? "bg-success" : "bg-warning text-dark")">
+                                    @item.Status
+                                </span>
+                            </td>
+                            <td>
+                                <form asp-action="Delete" asp-route-id="@item.App_ID" method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذا الموعد؟');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center text-muted mt-5">
+            <i class="bi bi-calendar-x fs-1"></i>
+            <p class="mt-3">No appointments available</p>
+        </div>
+    }
+</div>
+
+<style>
+/* Table styling */
+.styled-table {
+    background: #fff;
+    min-width: 800px;
+}
+
+.styled-table thead th {
+    font-weight: 600;
+    color: #495057;
+    padding: 1rem;
+    text-align: center;
+}
+
+.styled-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.styled-table tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+.styled-table tbody tr:nth-child(even) {
+    background-color: #f0f4f8;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #e3f2fd !important;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.85rem;
+}
+
+/* Buttons */
+.btn-outline-danger {
+    border: 2px solid #da4e4e;
+    color: #da4e4e;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #da4e4e;
+    color: white;
+}
+
+/* Responsive */
+@@media (max-width:768px){
+    .table-responsive { overflow-x:auto; }
+}
+</style>

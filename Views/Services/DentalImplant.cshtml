@@ -1,0 +1,264 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@* هذا الكود الكامل والمصحح يغنيكِ عن ملف _Layout.cshtml في الوقت الحالي *@
+@{
+    Layout = null;
+    ViewData["Title"] = "الرئيسية - عيادة Dr.Smile";
+}
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زراعة الأسنان - Dr. Smile</title>
+    <!-- ملفات التنسيقات -->
+    <link rel="stylesheet" href="~/css/service-style.css">
+    <link rel="stylesheet" href="~/css/homeStyle.css">
+    <!-- خط جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+    <!-- مكتبات -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<style>
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: #f0f4f8;
+        margin: 0;
+        padding: 0;
+        line-height: 1.8;
+        color: #333;
+    }
+</style>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+        <div class="container-fluid custom-container">
+            <img class="logo custom-logo" src="~/images/logo1.png">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-color: white;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse custom-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav custom-nav">
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+
+                    </li>
+
+
+                    <li class="nav-item dropdown custom-item">
+                        <a class="nav-link dropdown-toggle custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="service" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            خدماتنا
+                        </a>
+                        <ul class="dropdown-menu custom-dropdown">
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="cases-container">حالات قبل وبعد</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">أراء العملاء</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    </li>
+
+
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" asp-controller="Package" asp-action="Index">باكيدج</a> </li>
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" href="#appform">احجز موعدك الآن </a> </li>
+
+                    <button class="lang-btn ms-3" onclick="changeLang('ar')">EN</button>
+                </ul>
+
+            </div>
+        </div>
+
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>زراعة الأسنان</h1>
+        <p>أسنان قوية ومستديمة مع مظهر أكثر ثقة</p>
+    </section>
+
+    <!-- Content -->
+    <div class="content container">
+        <h2>زراعة الأسنان – أسنان قوية ومستديمة مع مظهر أكثر ثقة</h2>
+        <p>
+            هل لديك واحدًا أو أكثر من الأسنان المفقودة؟ تشكل لك الأسنان التالفة أو المفقودة مشكلة نفسية أو تعيقك عن التواصل
+            الإجتماعي بصورة جيدة؟ تعاني من خلل في وظيفة الأسنان في مضغ الطعام بسبب فقدان واحد أو أكثر من الأسنان الطبيعية؟
+        </p>
+        <p>
+            كل هذه المشاكل الان يمكنك حلها في وقت قياسي وبطرق آمنة جدًا وباستخدام أحدث التقنيات مع dr.smile ، فلا داعي للقلق
+            الكثير!
+        </p>
+        <p>
+            في عيادات dr.smile مصطفى يمكنك إجراء زراعة الأسنان لتعويض أسنانك المفقودة والحصول على أسنان دائمة لتمنحك مظهر أصغر
+            وتحافظ على شباب الوجه بدون ألم ودون وجود أي عيوب تواجهك فيما بعد.
+        </p>
+
+        <h2>زراعة الأسنان Dental implant</h2>
+        <p>
+            أصبحت زراعة الاسنان في الوقت الحالي من الإجراءات المطلوبة بكثرة للعديد من الحالات مثل الحشو أو التنظيف أو غيرها.
+        </p>
+        <p>
+            وهي عبارة عن إجراء يتم من خلاله استبدال جذور الأسنان بدعامات معدنية، واستبدال الأسنان التالفة أو المفقودة بأسنان
+            صناعية تشبه الى حد كبير الأسنان الحقيقية وتعمل بشكل صحي وسليم.
+        </p>
+        <p>
+            وتعتمد جراحة زراعة الأسنان بشكل كبير على حالة عظم الفك وقد تتضمن جراحة زراعة الأسنان عدة إجراءات وتستغرق وقتًا طويل
+            نسبيًا للتأكد من التئام تلك الدعامات المعدنية مع عظام الفك بصورة سليمة.
+        </p>
+
+        <h2>لماذا تعد زراعة الأسنان هي الخيار الأفضل؟</h2>
+        <p>
+            تعد زراعة الأسنان من الإجراءات القادرة على عمل تغيير ملحوظ جدًا في حالة المريض، سواء من الجانب الجمالي وإعطاء مظهر
+            ابتسامة جميل وطبيعي.
+        </p>
+        <p>
+            أو من الجانب الوظيفي والحصول على أسنان سليمة وقوية وتقوم بوظيفتها على أفضل صورة، على عكس بعض التركيبات التي تؤثر
+            على الأسنان المجاورة لاعتمادها على برد الأسنان؛ لذلك جاءت الزراعة كحل مثالي لتعويض فقدان الأسنان بدون التأثير على
+            الأسنان المجاورة.
+        </p>
+
+        <h2>مراحل زراعة الأسنان في مركز dr.smile</h2>
+        <p>
+            تتم زراعة الأسنان على مرحلتين، نهتم في كلا منهما بأدق التفاصيل لضمان نجاح زراعة الأسنان والاستمتاع بأسنان قوية
+            ودائمة في أقرب وقت:
+        </p>
+        <ul>
+            <li>
+                <strong>المرحلة الأولى:</strong> مرحلة تحضير العظام لاستقبال الغرسات، ونستخدم في ذلك احدث انواع الزراعات في العالم،
+                وقد تستغرق هذه المرحلة فترة حوالي 3 شهور في أغلب الحالات لإتمام التئام العظام مع الغرسة تمامًا وضمان قوة الأسنان
+                المزروعة، وهناك بعض الحالات قد تتطلب زراعة عظام في حالة تلف العظام المراد الزرع بها.
+            </li>
+            <li><strong>المرحلة الثانية:</strong> مرحلة تركيب التيجان او الاسنان الاصطناعية بشكل متناسب مع الاسنان المجاورة لها.</li>
+        </ul>
+
+        <h2>هل يمكن زراعة الأسنان بعد خلع الضرس مباشرة؟</h2>
+        <p>
+            السؤال الأكثر تكرارًا، يجيب dr.smile عن هذا السؤال: بالفعل يمكن إتمام عملية الزراعة فورًا بعد الخلع، ويكون ذلك الأفضل؛
+            للإستفادة من عملية التئام العظام الطبيعية بعد الخلع واستغلالها في التئام عظم اللثة مع الغرسة أو الدعامة المعدنية للأسنان
+            المزروعة.
+        </p>
+
+        <h2>نسبة نجاح عمليات زراعة الاسنان مع dr.smile</h2>
+        <p>
+            خبرة الطبيب المعالج، ومعرفته بأحدث التقنيات العالمية، وتزويد المركز الخاص به بأحدث الاجهزة المستخدمة في التشخيص وزراعة
+            الاسنان يجعل زراعة الأسنان تتم بسهولة ويسر عما قبل مع تحقيق أعلى نسب نجاح.
+        </p>
+        <p>
+            ومن الأجهزة التي تساعد في زيادة معدلات نجاح زراعة الأسنان، جهاز الأشعة الثلاثية الأبعاد الذي يمنح الطبيب أشعة تفصيلية
+            للفك والعظام والأوعية الدموية والأعصاب الموجودة في هذه المنطقة، مما ساهم في نجاح زراعة الأسنان لتصل إلى معدلات مرتفعة
+            تصل الى 95% واكثر.
+        </p>
+        <p>
+            كما ينفرد ايضًا مركز dr.smile بتقديم خدمة الزراعة والتركيبات الفورية للحالات المناسبة وذلك باستخدام أحدث أجهزة تصنيع
+            التركيبات في العالم <strong>Cerec System</strong>.
+        </p>
+        <p>
+            كل هذه العوامل تجعل خدمة زراعة الأسنان المقدمة من مركز dr.smile هي الافضل، ويمكنكم متابعة حالات زراعة الأسنان التي تم
+            علاجها بنجاح في مركز dr.smile من خلال وسائل التواصل الاجتماعي المختلفة.
+        </p>
+
+        <h2>صور قبل وبعد</h2>
+        <div class="gallery d-flex justify-content-center flex-wrap gap-3">
+            <img src="~/images/case1.jpg" alt="قبل">
+            <img src="~/images/case2.jpg" alt="بعد">
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-bg">
+        <div class="container">
+            <div class="row">
+                <!-- بيانات العيادة -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="footer-title">عيادة دكتور سمايل للأسنان</h5>
+                    <p><i class="fas fa-map-marker-alt ms-2"></i> 123 شارع الأسنان، مدينة الابتسامات، 12345</p>
+                    <p><i class="fas fa-phone-alt ms-2"></i> 10-9467-1361 (20+)</p>
+                    <p><i class="fas fa-envelope ms-2"></i> DoctorSmile@gmail.com</p>
+                    <p><i class="fas fa-clock ms-2"></i> الأحد - الخميس: 8:00 ص - 6:00 م | السبت: 9:00 ص - 2:00 م</p>
+                </div>
+
+                <!-- روابط سريعة -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">روابط سريعة</h5>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="HomePage" asp-fragment="service">خدماتنا</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">آراء العملاء</a>
+                    <a class="footer-link" asp-controller="Package" asp-action="Index">باكيدج</a>
+                    <a class="footer-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link"
+                           asp-controller="Home"
+                           asp-action="HomePage"
+                           asp-fragment="appform">
+                            احجز موعدك الآن
+                        </a>
+                    </li>
+                </div>
+
+
+                <!-- الخدمات -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">خدماتنا</h5>
+                    <a class="footer-link" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a>
+                </div>
+
+                <!-- تواصل -->
+                <div class="col-lg-3 col-md-6 mb-4 text-center">
+                    <img src="~/images/logo.jpg" class="footer-logo mb-3" alt="شعار">
+                    <h5 class="footer-title mb-3">ابق على تواصل</h5>
+                    <div class="social-icons justify-content-center">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- حقوق -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 عيادة دكتور سمايل. جميع الحقوق محفوظة. |
+                        <a href="#" class="text-decoration-none text-secondary">سياسة الخصوصية</a> |
+                        <a href="#" class="text-decoration-none text-secondary">شروط الخدمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

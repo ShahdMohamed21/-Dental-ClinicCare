@@ -1,0 +1,232 @@
+﻿@model DashboardStatsVM
+@{
+    ViewData["Title"] = "Dental Clinic Dashboard";
+}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+</head>
+<style>
+    .dashboard-container {
+        max-width: 1400px;
+        margin: auto;
+        padding: 40px 20px;
+    }
+
+    .dashboard-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #003366;
+        margin-bottom: 50px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 20px;
+        height:150px;
+        padding: 20px 20px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(4,0,0,0.3);
+        transition: 0.3s ease;
+        border: 1px solid #eee;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px black;
+        }
+
+        .dashboard-card i {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: #0055aa;
+        }
+
+    .card-users i {
+        color: #0066CC;
+    }
+
+    .card-patients i {
+        color: #009999;
+    }
+
+    .card-doctors i {
+        color: #28a745;
+    }
+
+    .card-nurses i {
+        color: #17a2b8;
+    }
+
+    .card-services i {
+        color: #ff9800;
+    }
+
+    .card-packages i {
+        color: #ff5722;
+    }
+
+    .dashboard-card h3 {
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 23px;
+        color: #003355;
+    }
+
+    .dashboard-card a {
+        text-decoration: none !important;
+        font-size: 18px;
+        font-weight: 600;
+        color: #003366;
+    }
+    /* ====== Circle Stats ====== */
+
+    /* ====== Circle Stats Bigger + Wider ====== */
+    .circle-stats-grid {
+        display: flex; /* جنب بعض بالعرض */
+        justify-content: center; /* توسيط الكروت */
+        gap: 80px; /* مسافة أوسع بين الدوائر */
+        margin-top: 30px;
+        flex-wrap: wrap; 
+    }
+
+    .circle-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .circle {
+        width: 200px; /* تكبير الدائرة */
+        height: 200px;
+        border-radius: 50%;
+        background: conic-gradient(var(--clr) calc(var(--value) * 1%), #eee 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25); /* شادو أغمق */
+        transition: 0.5s;
+    }
+
+    .circle-inner {
+        width: 150px; /* تكبير الدائرة الداخلية */
+        height: 150px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px; /* خط أكبر */
+        font-weight: 800;
+        color: #003366;
+    }
+
+    .circle-title {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #003366;
+    }
+
+    /* Gradient للألوان حسب كل كارت */
+    .circle-card:nth-child(1) .circle {
+        --clr: #00a0a0;
+    }
+
+    .circle-card:nth-child(2) .circle {
+        --clr: #ff9800;
+    }
+
+    .circle-card:nth-child(3) .circle {
+        --clr: #28a745;
+    }
+
+</style>
+
+
+<div class="dashboard-container text-center">
+    <h1 class="dashboard-title">Welcome to DR.Smile Dental Clinic 🦷</h1>
+
+    <div class="dashboard-grid">
+
+        <a asp-controller="User" asp-action="Index" class="dashboard-card card-users">
+            <i class="bi bi-people-fill"></i>
+            <h3>Users</h3>
+            <span>View & Manage Users</span>
+        </a>
+
+        <a asp-controller="Patient" asp-action="Index" class="dashboard-card card-patients">
+            <i class="bi bi-person-vcard-fill"></i>
+            <h3>Patients</h3>
+            <span>Manage Patient Records</span>
+        </a>
+
+        <a asp-controller="Doctor" asp-action="Index" asp-route-id="1" class="dashboard-card card-doctors">
+            <i class="bi bi-person-heart"></i>
+
+            <h3>Doctor</h3>
+            <span>Doctors & Schedules</span>
+        </a>
+
+        <a asp-controller="Nurses" asp-action="Index" class="dashboard-card card-nurses">
+            <i class="bi bi-heart-pulse-fill"></i>
+            <h3>Nurses</h3>
+            <span>Nursing Staff</span>
+        </a>
+
+        <a asp-controller="Services" asp-action="Index" class="dashboard-card card-services">
+            <i class="bi bi-clipboard2-pulse"></i>
+            <h3>Services</h3>
+            <span>Dental Services</span>
+        </a>
+
+        <a asp-controller="Package" asp-action="Dashboard" class="dashboard-card card-packages">
+            <i class="bi bi-box-seam-fill"></i>
+            <h3>Packages</h3>
+            <span>Treatment Packages</span>
+        </a>
+
+    </div>
+</div>
+
+
+<div class="circle-stats-grid">
+
+    <!-- Patients -->
+    <div class="circle-card">
+        <div class="circle" style="--value:@Model.PatientsPercentage; --clr: #00a0a0;">
+            <div class="circle-inner">@Model.PatientsPercentage%</div>
+        </div>
+        <div class="circle-title">
+            <i class="bi bi-people-fill"></i> Patients
+        </div>
+    </div>
+
+    <!-- Appointments -->
+    <div class="circle-card">
+        <div class="circle" style="--value:@Model.AppointmentsPercentage; --clr: #ff9800;">
+            <div class="circle-inner">@Model.AppointmentsPercentage%</div>
+        </div>
+        <div class="circle-title">
+            <i class="bi bi-calendar2-check-fill"></i> Appointments
+        </div>
+    </div>
+
+    <!-- Users -->
+    <div class="circle-card">
+        <div class="circle" style="--value:@Model.UsersPercentage; --clr: #28a745;">
+            <div class="circle-inner">@Model.UsersPercentage%</div>
+        </div>
+        <div class="circle-title">
+            <i class="bi bi-person-badge-fill"></i> Users
+        </div>
+    </div>
+
+</div>
+

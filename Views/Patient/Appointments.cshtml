@@ -1,0 +1,42 @@
+﻿@model List<object>
+
+@{
+    ViewData["Title"] = "Patient Appointments";
+}
+
+<h2>Appointments</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No appointments found for this patient.</div>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Appointment ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Doctor Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                dynamic appointment = item;
+                <tr>
+                    <td>@appointment.App_ID</td>
+                    <td>@appointment.AppointmentDate</td>
+                    <td>@appointment.AppointmentTime</td>
+                    <td>@appointment.PaymentMethod</td>
+                    <td>@appointment.Status</td>
+                    <td>@appointment.DoctorName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a asp-action="Index" class="btn btn-secondary">Back</a>

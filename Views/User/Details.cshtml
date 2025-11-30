@@ -1,0 +1,108 @@
+﻿@model Final_project.ViewModels.UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="user-card d-flex align-items-center p-4 mb-4 rounded shadow-sm" style="background-color: #f0f4f8; border-left: 5px solid #003366;">
+    <!-- Avatar -->
+    <div class="me-4">
+        <img src="~/images/Image maker 2.jpg" alt="User Avatar" class="rounded-circle" style="width:80px; height:80px; object-fit:cover; border:2px solid #003366;">
+    </div>
+    <div>
+        <h4 class="fw-bold mb-2" style="color:#003366;">@Model.User.FullName</h4>
+        <div class="mb-1"><strong>Email:</strong> <span class="text-muted">@Model.User.Email</span></div>
+        <div class="mb-1"><strong>Phone:</strong> <span class="text-muted">@Model.User.Phone</span></div>
+        <div class="mb-1"><strong>Gender:</strong> <span class="text-muted">@Model.User.Gender</span></div>
+        <div class="mb-1"><strong>Address:</strong> <span class="text-muted">@Model.User.Address</span></div>
+        <div class="mb-1"><strong>Role:</strong> <span class="text-muted">@Model.User.Role</span></div>
+    </div>
+</div>
+
+<h5 class="mb-3 fw-bold" style="color:#003366;">Appointments</h5>
+
+@if (Model.Appointments == null || !Model.Appointments.Any())
+{
+    <div class="alert alert-warning mt-3">There Is No Appointments For This User</div>
+}
+else
+{
+    <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
+        <table class="styled-table table align-middle mb-0">
+            <thead class="table-primary">
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Services</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appt in Model.Appointments)
+                {
+                    <tr>
+                        <td>@appt.Patient.fullName</td>
+                        <td>@appt.AppointmentDate.ToString("yyyy-MM-dd")</td>
+                        <td>@appt.AppointmentTime.ToString(@"hh\:mm")</td>
+                        <td class="@(appt.Status=="Confirmed"?"text-success fw-bold":"text-warning fw-bold")">@appt.Status</td>
+                        <td>
+                            @foreach(var s in appt.AppointmentServices)
+                            {
+                                <span class="badge bg-primary m-1">@s.Service.Name</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="mt-4">
+    <a href="/User/Index" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left-circle"></i> Back to List
+    </a>
+</div>
+
+<style>
+.user-card h4 {
+    margin-bottom: 0.5rem;
+}
+
+.user-card img {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.styled-table th, .styled-table td {
+    vertical-align: middle;
+}
+
+.styled-table thead th {
+    background-color: rgb(232, 232, 232);
+}
+
+.styled-table tbody tr:hover {
+    background-color: #e3f2fd;
+}
+
+.badge {
+    font-size: 0.85rem;
+}
+
+.btn-outline-primary {
+    border-color: #003366;
+    color: #003366;
+}
+.btn-outline-primary:hover {
+    background-color: #003366;
+    color: #fff;
+}
+
+/* Responsive */
+@@media (max-width:768px){
+    .table-responsive { overflow-x:auto; }
+    .user-card { flex-direction: column; align-items: flex-start; }
+    .user-card img { margin-bottom: 1rem; }
+}
+</style>

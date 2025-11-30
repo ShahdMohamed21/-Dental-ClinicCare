@@ -1,0 +1,66 @@
+﻿@model Final_project.Models.Patient
+
+@{
+    ViewData["Title"] = "Edit Patient";
+    Layout = "_Layout";
+}
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm">
+    <input type="hidden" asp-for="Patient_ID" />
+
+    <div class="mb-3">
+        <label asp-for="fullName" class="form-label"></label>
+        <input asp-for="fullName" class="form-control" />
+        <span asp-validation-for="fullName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="Male" id="genderMale">
+            <label class="form-check-label" for="genderMale">Male</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="Female" id="genderFemale">
+            <label class="form-check-label" for="genderFemale">Female</label>
+        </div>
+
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone"
+               class="form-control"
+               pattern="\d{11}"
+               minlength="11"
+               maxlength="11"
+               title="Phone number must be exactly 11 digits" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

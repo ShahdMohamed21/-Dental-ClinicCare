@@ -1,0 +1,249 @@
+﻿@model Final_project.Models.User
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+}
+
+<style>
+    .profile-card {
+        max-width: 600px;
+        margin: 3rem auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 51, 102, 0.08);
+        padding: 2rem;
+        position: relative;
+        text-align: left;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        border: 5px solid black;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #e9f1ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #003366;
+        border: 3px solid #003366;
+    }
+
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #003366;
+    }
+
+    .profile-role {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.25rem;
+    }
+
+    .profile-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 2rem;
+        
+    }
+
+    .info-item {
+        background: #f9f9f9;
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #003366;
+    }
+
+    .btns {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn-update {
+        flex: 1;
+        padding: 0.75rem;
+        background: #003366;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-update:hover {
+            background: #002a55;
+            transform: translateY(-1px);
+        }
+
+    .btn-back {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #003366;
+        color: #003366;
+        border-radius: 8px;
+        background: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+        .btn-back:hover {
+            background: #003366;
+            color: white;
+        }
+    /* شاشات أقل من 768px (موبايل) */
+    @@media (max-width: 768px) {
+        .profile-card
+
+    {
+        max-width: 90%;
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .profile-name {
+        font-size: 1.3rem;
+    }
+
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+    }
+
+    /* خلي المعلومات عمود واحد بدل عمودين */
+    .profile-info {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+        .info-item {
+            padding: 1rem;
+            min-height: 60px; /* مناسب للموبايل */
+            border-radius: 12px;
+        }
+
+    .btns {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .btn-back {
+        width: 100%;
+    }
+
+    }
+
+    /* شاشات أقل من 480px (موبايل صغير) */
+    @@media (max-width: 480px) {
+        .profile-card
+
+    {
+        border-width: 3px;
+        padding: 1rem;
+    }
+
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 1.6rem;
+    }
+
+    .profile-name {
+        font-size: 1.1rem;
+    }
+
+    .info-value, .info-label {
+        font-size: 0.9rem;
+    }
+
+    .btn-back {
+        padding: 0.65rem;
+        font-size: 0.9rem;
+    }
+
+    }
+</style>
+
+<div class="profile-card">
+    <div class="profile-header">
+        <div>
+            <div class="profile-name">@Model.FullName</div>
+            <div class="profile-role">@Model.Role</div>
+        </div>
+        <div class="profile-avatar">
+            <i class="bi bi-person"></i>
+        </div>
+    </div>
+
+    <div class="profile-info">
+        <div class="info-item">
+            <div class="info-label">Full Name</div>
+            <div class="info-value">@Model.FullName</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Email</div>
+            <div class="info-value">@Model.Email</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Phone</div>
+            <div class="info-value">@Model.Phone</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Address</div>
+            <div class="info-value">@Model.Address</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Gender</div>
+            <div class="info-value">@Model.Gender</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Role</div>
+            <div class="info-value">@Model.Role</div>
+        </div>
+    </div>
+
+    <div class="btns">
+        <a asp-controller="Home" asp-action="Index" class="btn-back">
+            <i class="bi bi-arrow-left me-2"></i> Back
+        </a>
+ 
+    </div>
+</div>

@@ -1,0 +1,206 @@
+﻿@* هذا السطر يخبر نظام Razor View بتجاهل ملف _Layout.cshtml مؤقتاً، 
+   مما يمنع الخطأ ويسمح لك بالعمل على هذه الصفحة كوحدة مستقلة.
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "تسجيل الدخول - عيادة الأسنان";
+}
+@if (Context.Request.Query.ContainsKey("ReturnUrl"))
+{
+        <div style="
+        background-color: white;
+        text-align:center;
+        border-left: 8px solid #f44336;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        color: #b30000;
+        font-weight: 600;
+        font-size: 17px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    ">
+        ⚠️ يجب عليك تسجيل الدخول لإتمام عملية الحجز.
+            </div>
+}
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    @*
+       يجب استدعاء Bootstrap CSS هنا يدوياً لأننا تجاهلنا ملف Layout.
+       يرجى التأكد من أن هذا المسار صحيح في مجلد wwwroot/lib أو أي مسار آخر.
+    *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    @* استدعاء خط القاهرة (Cairo) من جوجل *@
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
+
+    @* =================================================
+       هنا نبدأ بتنسيقات CSS المخصصة للصفحة
+       ================================================= 
+    *@
+    <style>
+        /* التعديلات على الـ Body لتحسين وضوح النص الأبيض */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #001730, #002d5b); /* أزرق بحري داكن */
+            background-attachment: fixed;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* تظليل خفيف لزيادة الوضوح */
+            margin: 0; /* لإزالة أي هوامش تلقائية */
+        }
+
+        .login-page {
+            min-height: 100vh;
+            background-image: url('https://www.transparenttextures.com/patterns/symphony.png');
+            background-size: cover;
+            background-blend-mode: overlay;
+        }
+
+        /* تعديل الـ Card لزيادة النعومة */
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.98); /* زيادة وضوح الخلفية */
+            backdrop-filter: blur(10px); /* زيادة قيمة التمويه */
+            border: none; /* إزالة الحدود التقليدية */
+            border-radius: 25px; /* حواف أكثر نعومة وجمالية */
+            padding: 3rem; /* زيادة المسافة الداخلية قليلاً */
+            width: 100%;
+            max-width: 480px; /* زيادة عرض الكارد قليلاً */
+            color: #001730;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+            color: #002d5b;
+            font-weight: 700;
+            margin-bottom: 2.5rem !important; /* زيادة المسافة بعد العنوان */
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600; /* جعل الخط أثقل قليلاً */
+            color: #1a1a1a;
+        }
+
+        /* تحسين شكل حقول الإدخال */
+        .form-control {
+            background-color: rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            color: #001730;
+            border-radius: 15px; /* حواف أنعم */
+            padding: 1rem 1.25rem;
+            transition: all 0.4s ease;
+            height: auto;
+            font-size: 1rem;
+        }
+
+            .form-control::placeholder {
+                color: #888;
+                opacity: 1;
+            }
+
+            .form-control:focus {
+                background-color: #fff;
+                border: 1px solid #ffc300; /* لون التمييز الذهبي */
+                box-shadow: 0 0 0 4px rgba(255, 195, 0, 0.4); /* ظل ذهبي حول الحقل */
+                outline: none;
+            }
+
+        /* تنسيق زر تسجيل الدخول */
+        .login-btn {
+            background-color: #ffc300;
+            color: #001730;
+            font-weight: 700; /* جعل الخط سميك جداً */
+            border: none;
+            border-radius: 15px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+            .login-btn:hover {
+                background-color: #ffdd67;
+                transform: translateY(-3px); /* حركة خفيفة للأعلى */
+                box-shadow: 0 8px 20px rgba(255, 195, 0, 0.5); /* ظل أقوى */
+            }
+
+        .register-link {
+            color: #002d5b;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+            .register-link:hover {
+                color: #ffc300;
+                text-decoration: underline;
+            }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+            border-radius: 10px;
+            padding: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* استجابة الشاشة */
+        @@media (max-width: 768px) {
+            .login-card {
+                padding: 2rem;
+                margin: 30px 20px;
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-page d-flex align-items-center justify-content-center">
+        <div class="card login-card shadow-lg">
+
+            <h3 class="text-center login-title mb-4">تسجيل الدخول</h3>
+
+            @* رسالة خطأ التحقق من الصحة (Validation Summary) *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-3 text-center" style="display: block;"></div>
+
+            <form asp-action="Login" method="post">
+
+                <div class="form-group mb-4">
+                    <label for="Email">البريد الإلكتروني</label>
+                    <input type="email" name="Email" id="Email" class="form-control" placeholder="أدخل بريدك الإلكتروني" required />
+                </div>
+
+                <div class="form-group mb-5">
+                    <label for="Password">كلمة المرور</label>
+                    <input type="password" name="Password" id="Password" class="form-control" placeholder="أدخل كلمة المرور" required />
+                </div>
+
+                <button type="submit" class="btn login-btn w-100">تسجيل الدخول</button>
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="/Account/Register" class="register-link">ليس لديك حساب؟ أنشئ حساب جديد</a>
+            </div>
+
+            @* رسالة الخطأ العامة (مثلاً: بيانات تسجيل الدخول غير صحيحة) *@
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger mt-3 text-center">@ViewBag.ErrorMessage</div>
+            }
+        </div>
+    </div>
+
+    @*
+   يجب استدعاء Bootstrap JS هنا يدوياً إذا كنت بحاجة إلى مكونات تعتمد على JavaScript
+*@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

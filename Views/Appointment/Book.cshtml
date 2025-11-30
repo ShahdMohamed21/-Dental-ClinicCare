@@ -1,0 +1,127 @@
+﻿@model Final_project.Models.Appointments
+
+<div class="container mt-5 form-container">
+    <h2 class="form-title">Book an Appointment</h2>
+
+    <!-- Display validation errors -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <span>@error.ErrorMessage</span>
+
+                <br />
+            }
+        </div>
+    }
+
+    <form asp-action="Book" asp-controller="Appointment" method="post" id="BookingForm">
+        <div class="mb-3">
+            <label class="form-label">Patient Email</label>
+            <input type="email" name="patientEmail" class="form-control" value="@ViewData["patientEmail"]" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Appointment Date</label>
+            <input asp-for="AppointmentDate" type="date" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Appointment Time</label>
+            <input asp-for="AppointmentTime" type="time" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Select Services</label>
+            @foreach (var service in (List<Final_project.Models.Service>)ViewBag.ServicesList)
+            {
+                <div class="form-check">
+                    <input type="checkbox" name="SelectedServices" value="@service.Service_ID" class="form-check-input" id="service_@service.Service_ID" />
+                    <label class="form-check-label" for="service_@service.Service_ID">@service.Name</label>
+                </div>
+            }
+            <span id="Service-error" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
+            <select asp-for="PaymentMethod" class="form-control" required>
+                <option value="">Select Payment Method</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById("BookingForm").addEventListener("submit", function (e) {
+
+            const checkboxes = document.querySelectorAll('input[name="SelectedServices"]:checked');
+            const errorSpan = document.getElementById("Service-error");
+
+            if (checkboxes.length === 0) {
+                e.preventDefault();
+                errorSpan.textContent = "Please select at least one Service.";
+            } else {
+                errorSpan.textContent = "";
+            }
+        });
+    </script>
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin: 40px auto;
+    }
+
+    .form-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #001D3D;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background-color: #001D3D;
+        border-color: #001D3D;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #003366;
+            border-color: #003366;
+        }
+
+    .form-check-label {
+        margin-left: 8px;
+        font-weight: 500;
+    }
+
+    .form-control, .form-check-input, select {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .alert-danger span {
+        display: block;
+        margin-bottom: 5px;
+    }
+</style>

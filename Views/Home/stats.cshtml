@@ -1,0 +1,35 @@
+﻿@model DashboardStatsVM
+
+<div class="circle-stats-grid">
+
+    <!-- Patients -->
+    <div class="circle-card">
+        <div class="circle" style="--value:@Model.PatientsPercentage; --clr: #00a0a0;">
+            <div class="circle-inner">@Model.PatientsPercentage%</div>
+        </div>
+        <div class="circle-title">
+            <i class="bi bi-people-fill"></i> Patients
+        </div>
+    </div>
+
+    <!-- Appointments -->
+    <div class="circle-card">
+        <div class="circle" style="--value:@Model.AppointmentsPercentage; --clr: #ff9800;">
+            <div class="circle-inner">@Model.AppointmentsPercentage%</div>
+        </div>
+        <div class="circle-title">
+            <i class="bi bi-calendar2-check-fill"></i> Appointments
+        </div>
+    </div>
+
+    <!-- Users -->
+    <div class="circle-card">
+        <div class="circle" style="--value:@Model.UsersPercentage; --clr: #28a745;">
+            <div class="circle-inner">@Model.UsersPercentage%</div>
+        </div>
+        <div class="circle-title">
+            <i class="bi bi-person-badge-fill"></i> Users
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,65 @@
+﻿@model Final_project.Models.Doctor
+
+@{
+    ViewData["Title"] = "Edit Doctor";
+    var brandPrimary = "#003366";
+}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-md border-0" style="border-radius: 10px;">
+            <div class="card-header text-white text-center py-2" style="background-color: @brandPrimary; border-radius: 10px 10px 0 0;">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-pencil-square me-2"></i> Edit Doctor Details</h5>
+            </div>
+            <div class="card-body p-3">
+
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="Doctor_ID" />
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-bold">Full Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label fw-bold">Phone Number</label>
+                        <input asp-for="Phone" class="form-control" type="tel" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label fw-bold">Address</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Specialty" class="form-label fw-bold">Specialty</label>
+                        <input asp-for="Specialty" class="form-control" />
+                        <span asp-validation-for="Specialty" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="submit" class="btn btn-sm text-white fw-bold" style="background-color: @brandPrimary;">
+                            <i class="bi bi-save me-1"></i> Save Changes
+                        </button>
+
+                        <a asp-action="Index" asp-route-id="@Model.Doctor_ID" class="btn btn-sm btn-outline-secondary fw-bold">
+                            <i class="bi bi-x-circle me-1"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

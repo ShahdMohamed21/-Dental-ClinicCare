@@ -1,0 +1,79 @@
+﻿@model Final_project.Models.Package
+
+@{
+    ViewData["Title"] = "Add New Package";
+    Layout = "_Layout";
+}
+
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<form asp-action="Create"
+      method="post"
+      enctype="multipart/form-data"
+      class="border p-4 rounded shadow-sm"
+      style="border-top: 4px solid #003366; max-width:600px; margin:auto; background-color:#ffffff;">
+
+    <!-- NAME -->
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold" style="color:#003366;">Package Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter package name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold" style="color:#003366;">Description</label>
+        <textarea asp-for="Description" class="form-control" placeholder="Enter package description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <!-- PRICE -->
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label fw-bold" style="color:#003366;">Price</label>
+        <input asp-for="Price" class="form-control" placeholder="Enter package price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- IMAGE -->
+    <div class="mb-4">
+        <label class="form-label fw-bold" style="color:#003366;">Package Image</label>
+        <input asp-for="ImageFile" class="form-control" type="file" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="d-flex gap-2 justify-content-center">
+        <button type="submit"
+                class="btn"
+                style="background-color:#003366; color:white; border:2px solid #003366; width:120px;">
+            Save
+        </button>
+
+        <a asp-action="Dashboard"
+           class="btn"
+           style="border:2px solid #003366; color:#003366; background-color:white; width:120px;">
+            Back
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .form-control, textarea {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+</style>

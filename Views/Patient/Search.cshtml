@@ -1,0 +1,147 @@
+﻿@model List<Final_project.Models.Patient>
+
+@{
+    ViewData["Title"] = "Search Patients";
+}
+
+<h2 class="mb-4">Search Patients by Name</h2>
+
+<form method="post" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="name" class="form-control" placeholder="Enter patient name..."
+               value="@ViewBag.SearchTerm" required />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <h4 class="mb-3">Results for: "@ViewBag.SearchTerm"</h4>
+
+    <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
+        <table class="styled-table table align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var patient in Model)
+                {
+                    <tr>
+                        <td class="fw-bold text-muted">#@patient.Patient_ID</td>
+                        <td>@patient.fullName</td>
+                        <td>
+                            <span class="badge @(patient.Gender == "Male" ? "bg-primary" : "bg-pink")">
+                                @patient.Gender
+                            </span>
+                        </td>
+                        <td><a href="tel:@patient.Phone" class="text-decoration-none">@patient.Phone</a></td>
+                        <td><a href="mailto:@patient.Email" class="text-decoration-none">@patient.Email</a></td>
+                     
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (ViewBag.SearchTerm != null)
+{
+    <div class="text-center py-5">
+        <i class="fas fa-user-injured display-1 text-muted mb-3"></i>
+        <h4 class="text-muted">No patients found.</h4>
+        <p class="text-muted">Try a different search term.</p>
+    </div>
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to All Patients</a>
+
+<style>
+    /* ====== Reuse the styled-table from All Patients ====== */
+    .styled-table {
+        min-width: 800px;
+        background: #fff;
+    }
+
+        .styled-table thead th {
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem;
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: rgba(30, 136, 229, 0.03);
+        }
+
+        .styled-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+    .bg-pink {
+        background-color: #f8bbd0 !important;
+        color: #880e4f !important;
+    }
+
+    /* ===== Action Buttons ===== */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: .2s;
+        border: none;
+    }
+
+        .icon-btn.info {
+            background: #e3f2fd;
+            color: #1e88e5;
+        }
+
+            .icon-btn.info:hover {
+                background: #bbdefb;
+            }
+
+        .icon-btn.edit {
+            background: #fff8e1;
+            color: #ffb300;
+        }
+
+            .icon-btn.edit:hover {
+                background: #ffe082;
+            }
+
+    /* ====== Zebra Rows ====== */
+    .styled-table tbody tr:nth-child(odd) {
+        background-color: #fafafa; /* فاتح */
+    }
+
+    .styled-table tbody tr:nth-child(even) {
+        background-color: #f0f4f8; /* أغمق بشوية */
+    }
+
+    /* Hover */
+    .styled-table tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+</style>

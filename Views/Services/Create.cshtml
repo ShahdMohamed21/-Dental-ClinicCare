@@ -1,0 +1,47 @@
+﻿@model Final_project.Models.Service
+
+@{
+    ViewData["Title"] = "Add New Service";
+    Layout = "_Layout";
+}
+
+<h2 class="mb-3" style="color:#003366;">Add New Service</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow-sm" style="border-top: 4px solid #003366;">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold" style="color:#003366;"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold" style="color:#003366;"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label fw-bold" style="color:#003366;"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- ✅ Upload Image -->
+    <div class="mb-3">
+        <label class="form-label fw-bold" style="color:#003366;">Service Image</label>
+        <input asp-for="ImageFile" class="form-control" type="file" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn" style="background-color:#003366; color:white; border:2px solid #003366;">Save</button>
+    <a asp-action="Index" class="btn" style="border:2px solid #003366; color:#003366; background-color:white;">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,20 @@
+﻿@model Final_project.Models.Service
+
+@{
+    ViewData["Title"] = "Service Details";
+    Layout = "_Layout";
+}
+
+<div class="card shadow-lg border-0 p-4" style="border-top: 4px solid #003366;">
+    <h3 class="fw-bold" style="color:#003366;">@Model.Name</h3>
+
+    @if (Model.ImagePath != null)
+    {
+        <img src="~/uploads/@Model.ImagePath" width="200" class="mb-3 rounded shadow" />
+    }
+
+    <p><strong style="color:#003366;">Description:</strong> @Model.Description</p>
+    <p><strong style="color:#003366;">Price:</strong> @Model.Price</p>
+
+    <a asp-action="Index" class="btn" style="border:2px solid #003366; background-color:#003366; color:white;">Back</a>
+</div>

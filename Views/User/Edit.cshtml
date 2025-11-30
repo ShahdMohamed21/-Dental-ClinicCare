@@ -1,0 +1,280 @@
+﻿@model Final_project.Models.User
+@{
+    Layout = null;
+    ViewData["Title"] = "تعديل الملف الشخصي - عيادة Dr.Smile";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/service-style.css">
+    <link rel="stylesheet" href="~/css/homeStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<style>
+    /* تنسيقات القاعدة */
+    body {
+        background-color: #F3F4F6;
+        font-family: 'Cairo', sans-serif;
+        direction: rtl;
+    }
+
+    /* تنسيقات نموذج التعديل (Edit Form) */
+    .edit-form-container {
+        max-width: 600px;
+        margin: 120px auto 60px; /* تباعد من الأعلى أسفل الـ Navbar الثابت */
+        background: #fff;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        border-top: 5px solid #1E3A8A;
+        animation: fadeIn 0.8s ease;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 10px 15px;
+        border: 1px solid #D1D5DB;
+    }
+
+    .form-label {
+        font-weight: 700;
+        color: #1E3A8A;
+        margin-bottom: 5px;
+    }
+
+    .btn-primary-custom {
+        background-color: #1E3A8A;
+        border-color: #1E3A8A;
+        padding: 12px;
+        font-size: 18px;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+
+    .btn-secondary-custom {
+        padding: 12px;
+        font-size: 18px;
+        border-radius: 10px;
+        text-decoration: none; /* لضمان تنسيق رابط الإلغاء */
+        display: block; /* لضمان أخذ العرض الكامل */
+        color: #4B5563;
+        background-color: #E5E7EB;
+        border: none;
+    }
+
+        .btn-secondary-custom:hover {
+            background-color: #D1D5DB;
+            color: #4B5563;
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* تنسيقات الـ Navbar والـ Footer المستعارة من الكود السابق */
+    /* يجب وضع تنسيقات .custom-navbar و .footer-bg هنا أو في الملفات المرفقة */
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+        <div class="container-fluid custom-container">
+            <img class="logo custom-logo" src="~/images/logo1.png">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-color: white;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse custom-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav custom-nav">
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+                    </li>
+                    <li class="nav-item dropdown custom-item">
+                        <a class="nav-link dropdown-toggle custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="service" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            خدماتنا
+                        </a>
+                        <ul class="dropdown-menu custom-dropdown">
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="cases-container">حالات قبل وبعد</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">أراء العملاء</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" href="Backage.html">باكيدج</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="appointmentForm">احجز موعدك الآن </a>
+                    </li>
+                    <button class="lang-btn ms-3" onclick="changeLang('ar')">EN</button>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="edit-form-container">
+            <h2 class="text-center mb-4" style="color: #1E3A8A; font-weight: 800;">
+                <i class="fas fa-user-edit ms-2"></i> تعديل البيانات الشخصية
+            </h2>
+
+            <form asp-action="Edit" method="post">
+
+                <input type="hidden" asp-for="User_ID" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label">الاسم بالكامل</label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">البريد الإلكتروني</label>
+                    <input asp-for="Email" class="form-control" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label">رقم الهاتف</label>
+                    <input asp-for="Phone" class="form-control" type="tel" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label">العنوان</label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label">النوع</label>
+                    <select asp-for="Gender" class="form-select">
+                        <option value="ذكر">ذكر</option>
+                        <option value="أنثى">أنثى</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        <i class="fas fa-save ms-2"></i> حفظ التعديلات
+                    </button>
+                </div>
+                <div class="mt-2">
+                    <a asp-action="Profile" class="btn btn-secondary-custom w-100">
+                        <i class="fas fa-times ms-2"></i> إلغاء والعودة
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="footer-title">عيادة دكتور سمايل للأسنان</h5>
+                    <p><i class="fas fa-map-marker-alt ms-2"></i> 123 شارع الأسنان، مدينة الابتسامات، 12345</p>
+                    <p><i class="fas fa-phone-alt ms-2"></i> 10-9467-1361 (20+)</p>
+                    <p><i class="fas fa-envelope ms-2"></i> DoctorSmile@gmail.com</p>
+                    <p><i class="fas fa-clock ms-2"></i> الأحد - الخميس: 8:00 ص - 6:00 م | السبت: 9:00 ص - 2:00 م</p>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">روابط سريعة</h5>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="HomePage" asp-fragment="service">خدماتنا</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">آراء العملاء</a>
+                    <a class="footer-link" asp-controller="Packages" asp-action="Index">باكيدج</a>
+                    <a class="footer-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="appointmentForm">احجز الان</a>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">خدماتنا</h5>
+                    <a class="footer-link" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4 text-center">
+                    <img src="~/images/logo.jpg" class="footer-logo mb-3" alt="شعار">
+                    <h5 class="footer-title mb-3">ابق على تواصل</h5>
+                    <div class="social-icons justify-content-center">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 عيادة دكتور سمايل. جميع الحقوق محفوظة. |
+                        <a href="#" class="text-decoration-none text-secondary">سياسة الخصوصية</a> |
+                        <a href="#" class="text-decoration-none text-secondary">شروط الخدمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @* تفعيل التحقق من صحة النموذج (Validation Scripts) *@
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

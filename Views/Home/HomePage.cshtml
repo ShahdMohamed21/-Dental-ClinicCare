@@ -1,0 +1,665 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@model Final_project.Models.BookingViewModel
+@* هذا الكود الكامل والمصحح يغنيكِ عن ملف _Layout.cshtml في الوقت الحالي *@
+@{
+    Layout = null;
+    ViewData["Title"] = "الرئيسية - عيادة Dr.Smile";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    @* ----------------------------------------------------
+       استدعاء الأصول (CSS) - تم تصحيح المسار إلى ~
+       ---------------------------------------------------- *@
+    <link rel="stylesheet" href="~/css/homeStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* التنسيقات المشتركة التي كانت مدمجة لديك */
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding-top: 70px; /* مسافة علوية للـ fixed navbar */
+        }
+
+        .profile-pic {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 5px;
+        }
+        /* تنسيقات الـ Footer المضافة */
+        .footer-bg {
+            background-color: #001D3D;
+            color: #fff;
+            padding-top: 40px;
+        }
+
+        .footer-title {
+            color: #ffc300;
+            font-weight: 700;
+        }
+
+        .footer-link {
+            color: #fff;
+            display: block;
+            margin-bottom: 8px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+            .footer-link:hover {
+                color: #ffc300;
+            }
+
+        .social-icons a {
+            color: #ffc300;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+            .social-icons a:hover {
+                color: #fff;
+            }
+
+        .copyright {
+            padding-top: 20px;
+            padding-bottom: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+ 
+    </style>
+</head>
+
+<body>
+
+    @* ========================================================
+       1. شريط التنقل (Navbar) - تم تصحيح الروابط بالكامل
+       ======================================================== *@
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+        <div class="container-fluid custom-container">
+            <a asp-controller="Home" asp-action="HomePage">
+                <img class="logo custom-logo" src="~/images/logo1.png" alt="شعار العيادة">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-color: white;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse custom-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav custom-nav">
+
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a> </li>
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" href="#about">من نحن</a> </li>
+
+                    @* قائمة الخدمات المنسدلة - تم تصحيح الروابط *@
+                    <li class="nav-item dropdown custom-item">
+                        <a class="nav-link dropdown-toggle custom-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> خدماتنا </a>
+                        <ul class="dropdown-menu custom-dropdown">
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Hollywood"> ابتسامة هوليود</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a></li>
+                        </ul>
+                    </li>
+
+                    @* روابط الـ Anchor باستخدام asp-fragment *@
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" href="#cases-container">حالات قبل وبعد</a> </li>
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" href="#carouselTestimonials">آراء العملاء</a> </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Feedback" asp-action="Create">
+                            أضف رأيك
+                        </a>
+                    </li>
+
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" asp-controller="Package" asp-action="Index">باكيدج</a> </li>
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" href="#appform">احجز موعدك الآن </a> </li>
+
+                    @* منطق تسجيل الدخول/لوحة التحكم *@
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item custom-item ms-3">
+                            <a class="nav-link btn custom-link fw-bold text-dark"
+                               asp-controller="home" asp-action="index"
+                               style="background-color: #ffc300; padding: 8px 15px; border-radius: 8px;">
+                                📊 لوحة التحكم
+                            </a>
+                        </li>
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                       
+                        @* هذا هو العنصر الوحيد الذي يحتاج إلى تعديل في الـ Navbar *@
+                        <li class="nav-item custom-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="nav-link custom-link lang-btn border-0 bg-transparent text-white">تسجيل الخروج</button>
+                            </form>
+                        </li>
+                        <li class="nav-item custom-item ms-2">
+                            <a asp-controller="User" asp-action="Profile"
+                               class="nav-link custom-link fw-bold d-flex align-items-center"
+                               style="background-color: #003366; color:white; padding: 6px 15px; border-radius: 8px;">
+
+                                <i class="fas fa-user-circle me-2" style="font-size: 1.1rem;"></i>
+
+                                <span>مرحباً، @User.FindFirstValue(ClaimTypes.Name)</span>
+
+                            </a>
+                        </li>
+                    }
+
+                    else
+                    {
+                        <li class="nav-item custom-item"> <a class="nav-link custom-link lang-btn" asp-controller="Account" asp-action="Login">Login</a> </li>
+                        <li class="nav-item custom-item"> <a class="nav-link custom-link lang-btn" asp-controller="Account" asp-action="Register">Register</a> </li>
+                    }
+
+                    <form class="d-flex custom-search-form ms-3" role="search">
+                        <input class="form-control custom-search-input" type="search" placeholder="ابحث هنا..." aria-label="Search">
+                        <button class="btn custom-search-btn" type="submit">بحث</button>
+                    </form>
+
+                    <button class="lang-btn ms-3" onclick="changeLang('ar')">EN</button>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @* ========================================================
+       2. محتوى الصفحة (Carousel, About, Services, Cases) - تم تصحيح مسارات الصور
+       ======================================================== *@
+    <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000">
+        <ol class="carousel-indicators">
+            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+        </ol>
+
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100 slider-img" src="~/images/home.jpg" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 slider-img" src="~/images/home2.jpg" alt="Second slide">
+            </div>
+        </div>
+
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="visually-hidden">Previous</span> </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="visually-hidden">Next</span> </a>
+    </div>
+
+    <section id="about" class="py-5 about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 order-2 order-md-1 about-text">
+                    <h2 class="mb-4"> <i class="fas fa-tooth me-2" style="color:#ffc300;"></i> من نحن</h2>
+                    <p>
+                        في <strong>عيادة Dr.Smile</strong>، نقدم رعاية أسنان متكاملة بأحدث التقنيات الطبية
+                        وبأعلى معايير الجودة. هدفنا هو رسم الابتسامة على وجوه مرضانا من خلال خدمات مثل
+                        <span class="highlight" style="color:#003566;font-weight:700;">
+                            زراعة الأسنان، تجميل الابتسامة، تقويم
+                            الأسنان
+                        </span>
+                        وغيرها الكثير.
+                    </p>
+                    <p>
+                        نحن نؤمن أن الابتسامة الصحية تعكس الثقة والجمال الداخلي، لذلك نحرص على توفير بيئة
+                        علاجية مريحة وآمنة لجميع الأعمار، مع متابعة دقيقة لكل حالة بشكل فردي.
+                    </p>
+                    <p>
+                        فريقنا من الأطباء المتخصصين ملتزم بتقديم تجربة علاجية استثنائية
+                        لضمان صحة فم وأسنان أفضل لكل فرد من عائلتك.
+                    </p>
+                    <a href="#service" class="btn btn-warning btn-lg mt-3"> اكتشف خدماتنا </a>
+                </div>
+                <div class="col-md-6 img-fluid order-1 order-md-2 mb-4 ps-md-5 img-contain">
+                    <img src="~/images/about-img.jpg" alt="عيادة الأسنان" class="img-fluid rounded shadow about-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* قسم الخدمات - تم تصحيح مسارات الصور والروابط *@
+    <section class="py-5" id="service" style="background-color: #001D3D;">
+        <div class="container">
+            <h2 class="text-center mb-5 text-white fw-bold">خدماتنا</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                @* تم تصحيح جميع مسارات صور الخدمات لـ src="~/images/serX.jpg" واستخدام Tag Helpers للروابط *@
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser3.jpg" class="card-img-top" alt="تقويم الأسنان" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">تقويم الأسنان</h5> <a asp-controller="Services" asp-action="Orthodontics" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser4.jpg" class="card-img-top" alt="زراعة الأسنان" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">زراعة الأسنان</h5> <a asp-controller="Services" asp-action="DentalImplant" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser1.jpg" class="card-img-top" alt="ابتسامة هوليود" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">ابتسامة هوليود</h5> <a asp-controller="Services" asp-action="Hollywood" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser5.jpg" class="card-img-top" alt="علاج اللثة" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">علاج اللثة</h5> <a asp-controller="Services" asp-action="GumTreatment" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser6.jpg" class="card-img-top" alt="أسنان الأطفال" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">أسنان الأطفال</h5> <a asp-controller="Services" asp-action="ChildDental" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser7.jpg" class="card-img-top" alt="علاج الجذور" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">علاج الجذور</h5> <a asp-controller="Services" asp-action="RootTreatment" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser8.jpg" class="card-img-top" alt="تبييض الأسنان" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">تبييض الأسنان</h5> <a asp-controller="Services" asp-action="Whitening" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 service-card shadow-sm border-0">
+                        <img src="~/images/ser9.jpg" class="card-img-top" alt="الحشوات التجميلية" style="height: 220px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column text-center"> <h5 class="card-title fw-bold text-dark mb-3">الحشوات التجميلية</h5> <a asp-controller="Services" asp-action="CosmeticFillings" class="btn btn-warning rounded-pill mt-auto px-4 py-2 fw-bold" style="background-color: #FFD60A; color: #001D3D;"> قراءه المزيد </a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* أيقونات التواصل الثابتة - تم تصحيح رابط فيسبوك لـ واتساب *@
+    <div class="fixed-icons">
+        <button class="icon-btn" onclick="window.location.href='tel:+20123456789'"><i class="fas fa-phone"></i></button>
+        <button class="icon-btn" onclick="window.open('https://wa.me/20123456789', '_blank')"><i class="fab fa-whatsapp" style="color: #ffc300;"></i></button>
+        <button class="icon-btn" onclick="window.open('mailto:drnour@example.com', '_blank')"><i class="fas fa-envelope"></i></button>
+        <button class="icon-btn" onclick="window.history.back()"><i class="fas fa-chevron-left"></i></button>
+    </div>
+
+    @* حالات قبل وبعد - تم تصحيح مسارات الصور *@
+    <div class="container-fluid cases" id="cases-container">
+        <h2 class="text-center mb-4">قبل و بعد</h2>
+        <div class="row" id="cases-container">
+            <div class="col-md-4 mb-4 case-card"><div class="card img-card"><img src="~/images/case1.jpg" class="card-img-top img-fluid" alt="Case 1"></div></div>
+            <div class="col-md-4 mb-4 case-card"><div class="card"><img src="~/images/case2.jpg" class="card-img-top img-fluid" alt="Case 2"></div></div>
+            <div class="col-md-4 mb-4 case-card"><div class="card"><img src="~/images/case3.jpg" class="card-img-top img-fluid" alt="Case 3"></div></div>
+            <div class="col-md-4 mb-4 case-card d-none extra-case"><div class="card"><img src="~/images/case4.jpg" class="card-img-top img-fluid" alt="Case 4"></div></div>
+            <div class="col-md-4 mb-4 case-card d-none extra-case"><div class="card"><img src="~/images/case5.jpg" class="card-img-top img-fluid" alt="Case 5"></div></div>
+            <div class="col-md-4 mb-4 case-card d-none extra-case"><div class="card"><img src="~/images/case6.jpg" class="card-img-top img-fluid" alt="Case 6"></div></div>
+        </div>
+        <div class="text-center mb-5 "><button id="toggle-btn" class="btn btn-warning px-4 cases-btn">عرض المزيد</button></div>
+    </div>
+
+    @* ========================================================
+       5. آراء العملاء - تم استكمال جميع الشرائح الناقصة
+       ======================================================== *@
+    <section id="carouselTestimonials" class="testimonials py-5" style="background-color: #001D3D; margin-top:20px; ">
+        <div class="container" style="margin-bottom:30px;">
+            <h2 class="section-title text-center mb-5 text-white">آراء عملائنا</h2>
+            <div id="carouselTestimonials" class="carousel slide" data-bs-ride="carousel">
+
+                @* مؤشرات الكاروسيل *@
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselTestimonials" data-bs-slide-to="0" class="active" style="background-color: #fff;"></li>
+                    <li data-bs-target="#carouselTestimonials" data-bs-slide-to="1" style="background-color: #fff;"></li>
+                </ol>
+
+                <div class="carousel-inner">
+                    @* الشريحة الأولى (Active) *@
+                    <div class="carousel-item active">
+                        <div class="row g-4 justify-content-center">
+                            @* الكارد الأول *@
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card testimonial-card h-100 shadow-sm border-0">
+                                    <div class="row g-0 h-100">
+                                        <div class="col-4 d-flex align-items-center justify-content-center"><img src="~/images/p1.jpg" class="rounded-circle" alt="عميل" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #FFD60A;"></div>
+                                        <div class="col-8 d-flex flex-column"><div class="card-body d-flex flex-column flex-grow-1"><h5 class="card-title fw-bold">محمد ابراهيم</h5><p class="card-text flex-grow-1">خدمة ممتازة جدًا وتعامل راقي من العيادة.</p><small class="text-muted mt-auto">منذ 3 دقائق</small></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* الكارد الثاني *@
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card testimonial-card h-100 shadow-sm border-0">
+                                    <div class="row g-0 h-100">
+                                        <div class="col-4 d-flex align-items-center justify-content-center"><img src="~/images/p2.jpg" class="rounded-circle" alt="عميل" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #FFD60A;"></div>
+                                        <div class="col-8 d-flex flex-column"><div class="card-body d-flex flex-column flex-grow-1"><h5 class="card-title fw-bold">حنين احمد</h5><p class="card-text flex-grow-1">النتيجة كانت أفضل من توقعاتي. دكتور محترف جدًا وشرح كل خطوة.</p><small class="text-muted mt-auto">منذ يوم</small></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* الكارد الثالث *@
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card testimonial-card h-100 shadow-sm border-0">
+                                    <div class="row g-0 h-100">
+                                        <div class="col-4 d-flex align-items-center justify-content-center"><img src="~/images/p3.jpg" class="rounded-circle" alt="عميل" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #FFD60A;"></div>
+                                        <div class="col-8 d-flex flex-column"><div class="card-body d-flex flex-column flex-grow-1"><h5 class="card-title fw-bold">لارا جوني</h5><p class="card-text flex-grow-1">طاقم العمل محترف جدًا ومريح، وأسعارهم مناسبة جدًا مقارنة بالجودة.</p><small class="text-muted mt-auto">منذ أسبوع</small></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* الشريحة الثانية (تم إضافتها من الكود الذي أرسلتيه) *@
+                    <div class="carousel-item">
+                        <div class="row g-4 justify-content-center">
+                            @* الكارد الرابع *@
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card testimonial-card h-100 shadow-sm border-0">
+                                    <div class="row g-0 h-100">
+                                        <div class="col-4 d-flex align-items-center justify-content-center"><img src="~/images/p4.jpg" class="rounded-circle" alt="عميل" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #FFD60A;"></div>
+                                        <div class="col-8 d-flex flex-column"><div class="card-body d-flex flex-column flex-grow-1"><h5 class="card-title fw-bold">احمد ايهاب</h5><p class="card-text flex-grow-1">تجربة رائعة، أنصح الجميع بالتعامل مع العيادة.</p><small class="text-muted mt-auto">منذ 5 أيام</small></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* الكارد الخامس *@
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card testimonial-card h-100 shadow-sm border-0">
+                                    <div class="row g-0 h-100">
+                                        <div class="col-4 d-flex align-items-center justify-content-center"><img src="~/images/p5.jpg" class="rounded-circle" alt="عميل" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #FFD60A;"></div>
+                                        <div class="col-8 d-flex flex-column"><div class="card-body d-flex flex-column flex-grow-1"><h5 class="card-title fw-bold">خالد وليد</h5><p class="card-text flex-grow-1">لم أكن أتخيل أن علاج الأسنان ممكن يكون بهذه السهولة!</p><small class="text-muted mt-auto">منذ 3 أسابيع</small></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* الكارد السادس *@
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card testimonial-card h-100 shadow-sm border-0">
+                                    <div class="row g-0 h-100">
+                                        <div class="col-4 d-flex align-items-center justify-content-center"><img src="~/images/p6.jpg" class="rounded-circle" alt="عميل" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #FFD60A;"></div>
+                                        <div class="col-8 d-flex flex-column"><div class="card-body d-flex flex-column flex-grow-1"><h5 class="card-title fw-bold">جيسكا</h5><p class="card-text flex-grow-1">العيادة نظيفة، الموظفين لطفاء، والدكتور دقيق جدًا.</p><small class="text-muted mt-auto">منذ شهر</small></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselTestimonials" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" style="opacity: 1;"></span>
+                    <span class="visually-hidden">السابق</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselTestimonials" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2" style="opacity: 1;"></span>
+                    <span class="visually-hidden">التالي</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    @* ========================================================
+       6. نموذج الحجز (Appointment Form) - تم استكماله بالكامل
+       ======================================================== *@
+    @* ========================================================
+  6. نموذج الحجز (Appointment Form) - محدث (الخدمات ديناميكية)
+  ======================================================== *@
+
+    <div class="container mt-5 form-container" id="appform">
+        <h2 class="form-title"><i class="fas fa-calendar-check mr-2"></i>احجز موعدك الآن</h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <form asp-action="Book" asp-controller="Booking" method="post" id="BookingForm">
+            @Html.AntiForgeryToken()
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-control" required/>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control"required />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone"
+                           class="form-control"
+                           pattern="\d{11}"
+                           minlength="11"
+                           maxlength="11"
+                           title="رقم الهاتف يجب ان يحتوي علي 11 رقم" required/>
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Age" class="form-label"></label>
+                    <input asp-for="Age" class="form-control" required />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label d-block">النوع</label>
+                    <div class="form-check form-check-inline">
+                        <input asp-for="Gender" class="form-check-input" type="radio" value="ذكر" />
+                        <label class="form-check-label">ذكر</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input asp-for="Gender" class="form-check-input" type="radio" value="أنثى" />
+                        <label class="form-check-label">أنثى</label>
+                    </div>
+                    <span id="Gender-error" class="text-danger d-block"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="AppointmentDate" class="form-label"></label>
+                    <input asp-for="AppointmentDate" class="form-control" type="date"  required/>
+                    <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="AppointmentTime" class="form-label"></label>
+                    <input asp-for="AppointmentTime" class="form-control" type="time" required />
+                    <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">الخدمات المطلوبة</label>
+                <div class="services-container">
+                    @if (ViewBag.Services != null)
+                    {
+                        @foreach (var service in ViewBag.Services)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedServices" value="@service.Service_ID" />
+                                <label class="form-check-label">@service.Name</label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">لا توجد خدمات متاحة حاليًا.</p>
+                    }
+                    <span id="Service-error" class="text-danger"></span>
+                </div>
+                </div>
+
+            <div class="mb-3">
+                <label asp-for="PaymentMethod" class="form-label"></label>
+                <select asp-for="PaymentMethod" class="form-select" required>
+                    <option value="">اختر طريقة الدفع</option>
+                    <option value="نقدي">نقدي</option>
+                    <option value="بطاقة">بطاقة</option>
+                    <option value="تحويل بنكي">تحويل بنكي</option>
+                </select>
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" style="background-color: #003366; border-color: #003366; color: white;">
+                تأكيد الحجز
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("BookingForm").addEventListener("submit", function (e) {
+            let valid = true;
+
+            // Validation للخدمات
+            const checkboxes = document.querySelectorAll('input[name="SelectedServices"]:checked');
+            const serviceError = document.getElementById("Service-error");
+            if (checkboxes.length === 0) {
+                serviceError.textContent = "يجب اختيار خدمة واحدة على الأقل";
+                valid = false;
+            } else {
+                serviceError.textContent = "";
+            }
+
+            // Validation للنوع
+            const genderChecked = document.querySelector('input[name="Gender"]:checked');
+            const genderError = document.getElementById("Gender-error");
+            if (!genderChecked) {
+                genderError.textContent = "يجب اختيار النوع.";
+                valid = false;
+            } else {
+                genderError.textContent = "";
+            }
+
+            if (!valid) {
+                e.preventDefault(); // منع الفورم من الإرسال لو فيه خطأ
+            }
+        });
+    </script>
+    
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    @* ========================================================
+       7. التذييل (Footer) - تم تصحيح مسار اللوجو والروابط
+       ======================================================== *@
+
+    <footer class="footer-bg">
+        <div class="container">
+            <div class="row">
+                <!-- بيانات العيادة -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="footer-title">عيادة دكتور سمايل للأسنان</h5>
+                    <p><i class="fas fa-map-marker-alt ms-2"></i> 123 شارع الأسنان، مدينة الابتسامات، 12345</p>
+                    <p><i class="fas fa-phone-alt ms-2"></i> 10-9467-1361 (20+)</p>
+                    <p><i class="fas fa-envelope ms-2"></i> DoctorSmile@gmail.com</p>
+                    <p><i class="fas fa-clock ms-2"></i> الأحد - الخميس: 8:00 ص - 6:00 م | السبت: 9:00 ص - 2:00 م</p>
+                </div>
+
+                <!-- روابط سريعة -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">روابط سريعة</h5>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="HomePage" asp-fragment="service">خدماتنا</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">آراء العملاء</a>
+                    <a class="footer-link" asp-controller="Package" asp-action="Index">باكيدج</a>
+                    <a class="footer-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link"
+                           asp-controller="Home"
+                           asp-action="HomePage"
+                           asp-fragment="appform">
+                            احجز موعدك الآن
+                        </a>
+                    </li>
+
+                </div>
+
+
+                <!-- الخدمات -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">خدماتنا</h5>
+                    <a class="footer-link" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a>
+                </div>
+
+                <!-- تواصل -->
+                <div class="col-lg-3 col-md-6 mb-4 text-center">
+                    <img src="~/images/logo.jpg" class="footer-logo mb-3" alt="شعار">
+                    <h5 class="footer-title mb-3">ابق على تواصل</h5>
+                    <div class="social-icons justify-content-center">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- حقوق -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 عيادة دكتور سمايل. جميع الحقوق محفوظة. |
+                        <a href="#" class="text-decoration-none text-secondary">سياسة الخصوصية</a> |
+                        <a href="#" class="text-decoration-none text-secondary">شروط الخدمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @* ========================================================
+       8. استدعاء السكربتات (JS) في نهاية الـ Body
+       ======================================================== *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+﻿@model Final_project.Models.Service
+
+@{
+    ViewData["Title"] = "Edit Service";
+    Layout = "_Layout";
+}
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow-sm" style="border-top: 4px solid #003366;">
+    <input type="hidden" asp-for="Service_ID" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold" style="color:#003366;"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold" style="color:#003366;"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label fw-bold" style="color:#003366;"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- ✅ Show old image -->
+    @if (Model.ImagePath != null)
+    {
+        <div class="mb-3">
+            <label class="fw-bold" style="color:#003366;">Current Image</label><br />
+            <img src="~/uploads/@Model.ImagePath" width="120" class="img-thumbnail" />
+        </div>
+    }
+
+    <!-- ✅ Upload new image -->
+    <div class="mb-3">
+        <label class="fw-bold" style="color:#003366;">Upload New Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+    </div>
+
+    <button class="btn" style="background-color:#003366; color:white; border:2px solid #003366;">Update</button>
+    <a asp-action="Index" class="btn" style="border:2px solid #003366; color:#003366; background-color:white;">Back</a>
+</form>

@@ -1,0 +1,71 @@
+﻿@model Final_project.Models.Package
+
+@{
+    ViewData["Title"] = "Edit Package";
+    Layout = "_Layout";
+}
+
+<h2 class="mb-3" style="color:#003366;">Edit Package</h2>
+
+<form asp-action="Edit"
+      method="post"
+      enctype="multipart/form-data"
+      class="border p-4 rounded shadow-sm"
+      style="border-top: 4px solid #003366;">
+
+    <input type="hidden" asp-for="Package_ID" />
+
+    <!-- NAME -->
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold" style="color:#003366;"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold" style="color:#003366;"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <!-- PRICE -->
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label fw-bold" style="color:#003366;"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- CURRENT IMAGE -->
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <div class="mb-3">
+            <label class="fw-bold" style="color:#003366;">Current Image</label><br />
+            <img src="~/uploads/packages/@Model.ImagePath" width="120" class="img-thumbnail" />
+        </div>
+    }
+
+    <!-- UPLOAD NEW IMAGE -->
+    <div class="mb-3">
+        <label class="fw-bold" style="color:#003366;">Upload New Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <!-- BUTTONS -->
+    <button class="btn"
+            style="background-color:#003366; color:white; border:2px solid #003366;">
+        Update
+    </button>
+
+    <a asp-action="Dashboard"
+       class="btn"
+       style="border:2px solid #003366; color:#003366; background-color:white;">
+        Back
+    </a>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

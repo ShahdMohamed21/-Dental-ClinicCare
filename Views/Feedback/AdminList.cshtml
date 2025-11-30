@@ -1,0 +1,57 @@
+﻿@using System.Linq
+@model List<Final_project.Models.Feedback>
+@{
+    ViewData["Title"] = "Users FeedBack";
+}
+@if (!Model.Any())
+{
+    <p>No Comments Yet</p>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr style="background-color:#003366;">
+                <th>Name</th>
+                <th>Rate</th>
+                <th>Comment</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PatientName</td>
+                    <td>@item.Rating ⭐</td>
+                    <td>@item.Comment</td>
+                    <td>@item.Date.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<style>
+    /* ===== Table Styling ===== */
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: white;
+    }
+
+        .table thead th {
+            background-color: #003366 !important; /* سماوي ناعم */
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .table tbody tr:hover {
+            transition: background-color 0.3s ease;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+
+</style>

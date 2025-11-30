@@ -1,0 +1,246 @@
+﻿@model List<Final_project.Models.Patient>
+
+@{
+    ViewData["Title"] = "All Patients";
+    Layout = "_Layout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+       
+        <div>
+            <a asp-action="Create" class="btn btn-success me-2 px-4">
+                <i class="fas fa-plus-circle me-1"></i> Add New Patient
+            </a>
+            <a asp-action="Search" class="btn btn-outline-primary px-4">
+                <i class="fas fa-search me-1"></i> Search Patient
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-container mb-5">
+        <div class="stat-box">
+            <h5 class="text-muted mb-1">Total Patients</h5>
+            <h3 class="mb-0 text-primary fw-bold">@ViewBag.Total</h3>
+        </div>
+        <div class="stat-box">
+            <h5 class="text-muted mb-1">Male</h5>
+            <h3 class="mb-0 text-warning fw-bold">@ViewBag.Male</h3>
+        </div>
+        <div class="stat-box">
+            <h5 class="text-muted mb-1">Female</h5>
+            <h3 class="mb-0" style="color: #e91e63 !important;">@ViewBag.Female</h3>
+        </div>
+    </div>
+
+    <!-- Table -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
+            <table class="styled-table table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var patient in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-muted">#@patient.Patient_ID</td>
+                            <td>@patient.fullName</td>
+                            <td>
+                                <span class="badge @(patient.Gender == "Male" || patient.Gender == "ذكر" ? "bg-primary" : "bg-pink")">
+                                    @patient.Gender
+                                </span>
+                            </td>
+                            <td><a href="tel:@patient.Phone" class="text-decoration-none">@patient.Phone</a></td>
+                            <td><a href="mailto:@patient.Email" class="text-decoration-none">@patient.Email</a></td>
+                            <td class="text-muted">@patient.Address</td>
+                            <td class="action-buttons">
+                                <a asp-action="Details" asp-route-id="@patient.Patient_ID" class="icon-btn info">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@patient.Patient_ID" class="icon-btn edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@patient.Patient_ID" class="icon-btn delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-user-injured display-1 text-muted mb-3"></i>
+            <h4 class="text-muted">No patients found.</h4>
+            <p class="text-muted">Start by adding a new patient.</p>
+            <a asp-action="Create" class="btn btn-primary mt-2">Add Your First Patient</a>
+        </div>
+    }
+</div>
+
+<style>
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-box {
+        background: #fff;
+        padding: 1.25rem 1.75rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        min-width: 180px;
+        text-align: center;
+        border-top: 3px solid #1e88e5;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+
+        .stat-box:nth-child(2) {
+            border-top-color: #ffb300;
+        }
+
+        .stat-box:nth-child(3) {
+            border-top-color: #e91e63;
+        }
+
+    .styled-table {
+        min-width: 800px;
+        background: #fff;
+    }
+
+        .styled-table thead th {
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem;
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: rgba(30, 136, 229, 0.03);
+        }
+
+        .styled-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+    .bg-pink {
+        background-color: #f8bbd0 !important;
+        color: #880e4f !important;
+    }
+    /* ===== Action Buttons ===== */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: .2s;
+        border: none;
+    }
+
+        .icon-btn.info {
+            background: #e3f2fd;
+            color: #1e88e5;
+        }
+
+            .icon-btn.info:hover {
+                background: #bbdefb;
+            }
+
+        .icon-btn.edit {
+            background: #fff8e1;
+            color: #ffb300;
+        }
+
+            .icon-btn.edit:hover {
+                background: #ffe082;
+            }
+
+        .icon-btn.delete {
+            background: #ffebee;
+            color: #e53935;
+        }
+
+            .icon-btn.delete:hover {
+                background: #ffcdd2;
+            }
+
+    /* ====== Zebra Rows ====== */
+    .styled-table tbody tr:nth-child(odd) {
+        background-color: #fafafa; /* فاتح */
+    }
+
+    .styled-table tbody tr:nth-child(even) {
+        background-color: #f0f4f8; /* أغمق بشوية بسيطة */
+    }
+
+    /* أثناء المرور */
+    .styled-table tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+    .btn-outline-primary:hover,
+    .btn-outline-warning:hover,
+    .btn-outline-danger:hover {
+        transform: scale(1.05);
+    }
+
+    @@media (max-width: 768px) {
+        .stats-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-box {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>

@@ -1,0 +1,101 @@
+﻿@model Final_project.Models.Patient
+
+@{
+    ViewData["Title"] = "Patient Details";
+    Layout = "_Layout";
+}
+
+<div class="patient-card d-flex align-items-center p-4 mb-4 rounded shadow-sm" style="background-color: #f0f4f8; border-left: 5px solid #003366;">
+    <!-- Avatar -->
+    <div class="me-4">
+        <img src="~/images/Image maker 2.jpg" alt="Patient Avatar" class="rounded-circle" style="width:80px; height:80px; object-fit:cover; border:2px solid #003366;">
+    </div>
+    <div>
+        <h4 class="fw-bold mb-2" style="color:#003366;">@Model.fullName</h4>
+        <div class="mb-1"><strong>Gender:</strong> <span class="text-muted">@Model.Gender</span></div>
+        <div class="mb-1"><strong>Phone:</strong> <span class="text-muted">@Model.Phone</span></div>
+        <div class="mb-1"><strong>Email:</strong> <span class="text-muted">@Model.Email</span></div>
+        <div class="mb-1"><strong>Address:</strong> <span class="text-muted">@Model.Address</span></div>
+    </div>
+</div>
+
+<h5 class="mb-3 fw-bold" style="color:#003366;">Appointments</h5>
+
+@if (Model.Appointments != null && Model.Appointments.Any())
+{
+    <table class="table table-hover align-middle shadow-sm rounded">
+        <thead class="table-primary">
+            <tr>
+                <th>#ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Doctor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in Model.Appointments)
+            {
+                var statusClass = app.Status == "Confirmed" ? "text-success fw-bold" : "text-warning fw-bold";
+                <tr>
+                    <td>@app.App_ID</td>
+                    <td>@app.AppointmentDate.ToString("yyyy-MM-dd")</td>
+                    <td>@app.AppointmentTime.ToString(@"hh\:mm")</td>
+                    <td>@app.PaymentMethod</td>
+                    <td class="@statusClass">@app.Status</td>
+                    <td>@app.Doctor?.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-secondary text-center mt-3">
+        No appointments found for this patient.
+    </div>
+}
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left-circle"></i> Back to Patients
+    </a>
+</div>
+
+<style>
+    .patient-card h4 {
+        margin-bottom: 0.5rem;
+    }
+
+    .patient-card img {
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+
+    }
+    .table th{
+        background-color: rgb(232, 232, 232);
+        
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e3f2fd;
+    }
+
+    h5 {
+        margin-bottom: 1rem;
+    }
+
+    .btn-outline-primary {
+        border-color: #003366;
+        color: #003366;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #003366;
+            color: #fff;
+        }
+</style>

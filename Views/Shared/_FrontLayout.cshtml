@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ضمان أن كل Toast له لون واضح */
+        #toast-container .toast {
+            opacity: 1 !important;
+            color: #fff !important;
+            direction: rtl;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* نجاح - أخضر */
+        #toast-container .toast-success {
+            background-color: #28a745 !important; /* أخضر */
+        }
+
+        /* حذف أو خطأ - أحمر */
+        #toast-container .toast-error {
+            background-color: #dc3545 !important; /* أحمر */
+        }
+
+        /* تعديل أو معلومة - أزرق */
+        #toast-container .toast-info {
+            background-color: #17a2b8 !important; /* أزرق */
+        }
+
+        /* تحذير - أصفر (لو حابب تستخدمه) */
+        #toast-container .toast-warning {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+
+        body {
+            background: #f8f9fa;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .confirmation-box {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .confirmation-title {
+            color: #003865;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5">
+        @RenderBody()
+    </div>
+    <script src="~/lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            rtl: true,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            preventDuplicates: true
+        };
+
+        (function () {
+        @if (TempData["Success"] != null)
+        {
+                <text>toastr.success('@Html.Raw(TempData["Success"])'); </text>
+        }
+        @if (TempData["Error"] != null)
+        {
+                <text>toastr.error('@Html.Raw(TempData["Error"])'); </text>
+        }
+        @if (TempData["Delete"] != null)
+        {
+                <text>toastr.error('@Html.Raw(TempData["Delete"])'); </text>
+        }
+        @if (TempData["Info"] != null)
+        {
+                <text>toastr.info('@Html.Raw(TempData["Info"])'); </text>
+        }
+        @if (TempData["Warning"] != null)
+        {
+                <text>toastr.warning('@Html.Raw(TempData["Warning"])'); </text>
+        }
+            })();
+    </script>
+</body>
+</html>

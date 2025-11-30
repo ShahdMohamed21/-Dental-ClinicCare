@@ -1,0 +1,220 @@
+﻿@model List<Final_project.Models.Service>
+@{
+    ViewData["Title"] = "Manage Services";
+    Layout = "_Layout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a asp-action="Create" class="btn btn-success px-4">
+        <i class="fas fa-plus-circle me-1"></i> Add New Service
+    </a>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
+        <table class="styled-table table align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Service Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var service in Model)
+                {
+                    <tr>
+                        <td class="fw-bold text-muted">#@service.Service_ID</td>
+                        <td>@service.Name</td>
+                        <td>@service.Description</td>
+                        <td>@service.Price.ToString("C")</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(service.ImagePath))
+                            {
+                                <img src="~/uploads/@service.ImagePath" width="70" class="rounded" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Image</span>
+                            }
+                        </td>
+                        <td class="action-buttons">
+                            <a asp-action="Details" asp-route-id="@service.Service_ID" class="icon-btn info">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@service.Service_ID" class="icon-btn edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@service.Service_ID" method="post" class="d-inline">
+                                <button type="submit" class="icon-btn delete"
+                                        onclick="return confirm('Are you sure you want to delete this service?');">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="fas fa-cogs display-1 text-muted mb-3"></i>
+        <h4 class="text-muted">No services found.</h4>
+        <p class="text-muted">Start by adding a new service.</p>
+        <a asp-action="Create" class="btn btn-primary mt-2">Add Service</a>
+    </div>
+}
+
+<style>
+    .styled-table {
+        min-width: 800px;
+        background: #fff;
+    }
+
+    .styled-table thead th {
+        font-weight: 600;
+        color: #495057;
+        padding: 1rem;
+    }
+
+    .styled-table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .styled-table tbody tr:nth-child(odd) {
+        background-color: #fafafa;
+    }
+
+    .styled-table tbody tr:nth-child(even) {
+        background-color: #f0f4f8;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+
+    /* ===== Action Buttons ===== */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: .2s;
+        border: none;
+    }
+
+    .icon-btn.info {
+        background: #e3f2fd;
+        color: #1e88e5;
+    }
+
+    .icon-btn.info:hover {
+        background: #bbdefb;
+    }
+
+    .icon-btn.edit {
+        background: #fff8e1;
+        color: #ffb300;
+    }
+
+    .icon-btn.edit:hover {
+        background: #ffe082;
+    }
+
+    .icon-btn.delete {
+        background: #ffebee;
+        color: #e53935;
+    }
+
+    .icon-btn.delete:hover {
+        background-color: #ffcdd2;
+    }
+
+    /* ===== Alerts ===== */
+    .alert-success {
+        background-color: #e0f2f1;
+        border-color: #b2dfdb;
+        color: #004d40;
+    }
+
+    .alert-info {
+        background-color: #e1f5fe;
+        border-color: #81d4fa;
+        color: #01579b;
+    }
+
+    .alert-danger {
+        background-color: #ffebee;
+        border-color: #ef9a9a;
+        color: #c62828;
+    }
+
+    /* ===== Buttons ===== */
+    .btn-success {
+        background-color: #00bfa5;
+        border: none;
+        color: white;
+        font-weight: 600;
+    }
+
+    .btn-success:hover {
+        background-color: #00796b;
+    }
+
+    /* ===== Responsive ===== */
+    @@media (max-width: 768px) {
+        .styled-table {
+            min-width: 100%;
+        }
+
+        .action-buttons {
+            flex-wrap: wrap;
+        }
+    }
+</style>

@@ -1,0 +1,526 @@
+﻿@model Final_project.ViewModels.UserProfileViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "الملف الشخصي - عيادة Dr.Smile";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - Dr. Smile</title>
+    <link rel="stylesheet" href="~/css/service-style.css">
+    <link rel="stylesheet" href="~/css/homeStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<style>
+    /* الأنماط العامة */
+    body {
+        background-color: #F0F4F8; /* خلفية هادئة */
+        font-family: 'Cairo', sans-serif;
+        direction: rtl;
+        padding-top: 80px;
+    }
+
+    /* الحاوية الرئيسية للواجهة */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        display: flex;
+        gap: 30px;
+        padding: 0 15px;
+    }
+
+    /* الشريط الجانبي (Sidebar) */
+    .sidebar {
+        width: 300px;
+        background: #fff;
+        border-radius: 15px;
+        padding: 30px 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        height: fit-content;
+    }
+
+    .profile-section {
+        text-align: center;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #E5E7EB;
+        margin-bottom: 20px;
+    }
+
+    .sidebar-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        background-color: #EBF2FF;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        color: #1E3A8A;
+        box-shadow: 0 0 0 5px rgba(30, 58, 138, 0.1);
+    }
+
+        .sidebar-img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+    .sidebar-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1E3A8A;
+        margin-bottom: 3px;
+    }
+
+    .sidebar-role {
+        font-size: 14px;
+        color: #6B7280;
+    }
+
+    .nav-link-item {
+        margin-bottom: 10px;
+    }
+
+        .nav-link-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #4B5563;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .nav-link-item a i {
+                font-size: 18px;
+                margin-left: 10px;
+                width: 20px;
+                text-align: center;
+            }
+
+            /* التغيير: اللون الأصفر/الذهبي */
+            .nav-link-item a.active {
+                background-color: #FFFBEB; /* لون أصفر فاتح جداً */
+                color: #FBBF24; /* لون أصفر ذهبي */
+                font-weight: 700;
+            }
+
+            .nav-link-item a:not(.active):hover {
+                background-color: #F3F4F6;
+                color: #1E3A8A;
+            }
+
+    /* المحتوى الرئيسي */
+    .main-content {
+        flex-grow: 1;
+        background: #fff;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    /* التغيير: شريط العنوان باللون الأصفر/الذهبي */
+    .content-section h3 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1E3A8A;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #FBBF24; /* شريط أصفر ذهبي تحت العنوان */
+        display: inline-block;
+    }
+
+    /* تنسيق الحقول */
+    .form-row {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #4B5563;
+        margin-bottom: 5px;
+    }
+
+    .form-control-static {
+        background-color: #F9FAFB;
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 10px 15px;
+        color: #1F2937;
+        font-size: 16px;
+        width: 100%;
+        transition: border-color 0.3s;
+    }
+
+        .form-control-static:hover {
+            border-color: #3B82F6;
+        }
+
+    /* التغيير: زر التعديل باللون الأصفر/الذهبي */
+    .edit-btn {
+        background: #FBBF24; /* لون أصفر ذهبي */
+        color: #1E3A8A; /* لون النص أزرق داكن لتباين أفضل مع الأصفر */
+        padding: 14px 25px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        border: none;
+        transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        width: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4); /* ظل أصفر */
+        text-decoration: none;
+    }
+
+        .edit-btn i {
+            margin-left: 10px;
+            color: #1E3A8A;
+        }
+
+        .edit-btn:hover {
+            background: #FCD34D; /* درجة أفتح عند التمرير */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(251, 191, 36, 0.6);
+            color: #1E3A8A;
+        }
+
+    /* تنسيق المواعيد (بدون كاردات منفصلة) */
+    .appointment-item {
+        background-color: #F9FAFB;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.3s;
+        border-right: 5px solid #1E3A8A;
+    }
+
+        .appointment-item:hover {
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
+        }
+
+    .appointment-details {
+        flex-grow: 1;
+    }
+
+        .appointment-details p {
+            margin: 0;
+            font-size: 16px;
+            color: #374151;
+            font-weight: 500;
+            line-height: 1.8;
+        }
+
+        .appointment-details span {
+            font-weight: 700;
+            color: #1E3A8A;
+            margin-left: 5px;
+        }
+
+    .appointment-services-list {
+        display: inline-block;
+        padding: 3px 8px;
+        background-color: #EBF2FF;
+        color: #1E3A8A;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* حالة الموعد لا تزال صفراء (لأنها حالة وليست جزء من الثيم) */
+    .appointment-status {
+        padding: 8px 15px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        white-space: nowrap;
+        background-color: #FEF3C7;
+        color: #92400E;
+    }
+
+
+    /* استجابة الشاشة */
+    @@media (max-width: 992px) {
+        .dashboard-container {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            padding: 25px;
+        }
+
+        .content-section h3 {
+            font-size: 22px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .appointment-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .appointment-status {
+            margin-top: 10px;
+        }
+
+        .form-row .col-md-6 {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+        <div class="container-fluid custom-container">
+            <img class="logo custom-logo" src="~/images/logo1.png">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-color: white;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse custom-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav custom-nav">
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+
+                    </li>
+
+
+                    <li class="nav-item dropdown custom-item">
+                        <a class="nav-link dropdown-toggle custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="service" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            خدماتنا
+                        </a>
+                        <ul class="dropdown-menu custom-dropdown">
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="cases-container">حالات قبل وبعد</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">أراء العملاء</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    </li>
+
+
+                    <li class="nav-item custom-item"> <a class="nav-link custom-link" asp-controller="Package" asp-action="Index">باكيدج</a> </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link"
+                           asp-controller="Home"
+                           asp-action="HomePage"
+                           asp-fragment="appform">
+                            احجز موعدك الآن
+                        </a>
+                    </li>
+
+                    <button class="lang-btn ms-3" onclick="changeLang('ar')">EN</button>
+                </ul>
+
+            </div>
+        </div>
+
+    </nav>
+    <div class="dashboard-container">
+
+        <div class="sidebar">
+            <div class="profile-section">
+                <div class="sidebar-img">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="sidebar-name">@Model.User.FullName</div>
+                <div class="sidebar-role">مريض</div>
+            </div>
+
+            <div class="navigation">
+                <div class="nav-link-item"><a href="#" class="active"><i class="fas fa-user"></i> البيانات الشخصية</a></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <div class="content-section mb-5">
+                <h3><i class="fas fa-info-circle ms-2"></i> البيانات الشخصية</h3>
+
+                <div class="row form-row">
+                    <div class="col-md-6 form-group">
+                        <label>الاسم بالكامل:</label>
+                        <div class="form-control-static">@Model.User.FullName</div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>النوع:</label>
+                        <div class="form-control-static">@Model.User.Gender</div>
+                    </div>
+                </div>
+
+                <div class="row form-row">
+                    <div class="col-md-6 form-group">
+                        <label>البريد الإلكتروني:</label>
+                        <div class="form-control-static">@Model.User.Email</div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>رقم الهاتف:</label>
+                        <div class="form-control-static">@Model.User.Phone</div>
+                    </div>
+                </div>
+
+                <div class="row form-row">
+                    <div class="col-md-12 form-group">
+                        <label>العنوان:</label>
+                        <div class="form-control-static">@Model.User.Address</div>
+                    </div>
+                </div>
+
+                <a asp-controller="User" asp-action="Edit" asp-route-id="@Model.User.User_ID" class="edit-btn">
+                    <i class="fas fa-user-edit"></i> تعديل بياناتي
+                </a>
+            </div>
+
+            <hr />
+
+            <div class="content-section mt-5">
+                <h3><i class="fas fa-calendar-check ms-2"></i> مواعيدي القادمة </h3>
+
+                @if (!Model.Appointments.Any())
+                {
+                    <div class="alert alert-info mt-3" style="border-radius: 12px; font-weight: 600;">لا توجد مواعيد محجوزة حالياً.</div>
+                }
+                else
+                {
+                    @foreach (var a in Model.Appointments.OrderByDescending(x => x.AppointmentDate).ThenByDescending(x => x.AppointmentTime))
+                    {
+                        <div class="appointment-item">
+                            <div class="appointment-details">
+                                <p><span>اسم المريض:</span> @a.Patient.fullName</p>
+                                <p><span>التاريخ والوقت:</span> @a.AppointmentDate.ToString("yyyy-MM-dd") الساعة @a.AppointmentTime.ToString(@"hh\:mm")</p>
+                                <p>
+                                    <span>الخدمات:</span>
+                                    @foreach (var s in a.AppointmentServices)
+                                    {
+                                        <span class="appointment-services-list">@s.Service.Name</span>
+                                    }
+                                </p>
+                            </div>
+                            <div class="appointment-status">@a.Status</div>
+                        </div>
+                    }
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer-bg">
+        <div class="container">
+            <div class="row">
+                <!-- بيانات العيادة -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="footer-title">عيادة دكتور سمايل للأسنان</h5>
+                    <p><i class="fas fa-map-marker-alt ms-2"></i> 123 شارع الأسنان، مدينة الابتسامات، 12345</p>
+                    <p><i class="fas fa-phone-alt ms-2"></i> 10-9467-1361 (20+)</p>
+                    <p><i class="fas fa-envelope ms-2"></i> DoctorSmile@gmail.com</p>
+                    <p><i class="fas fa-clock ms-2"></i> الأحد - الخميس: 8:00 ص - 6:00 م | السبت: 9:00 ص - 2:00 م</p>
+                </div>
+
+                <!-- روابط سريعة -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">روابط سريعة</h5>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage">الرئيسية</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="about">من نحن</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="HomePage" asp-fragment="service">خدماتنا</a>
+                    <a class="footer-link" asp-controller="Home" asp-action="HomePage" asp-fragment="carouselTestimonials">آراء العملاء</a>
+                    <a class="footer-link" asp-controller="Package" asp-action="Index">باكيدج</a>
+                    <a class="footer-link" asp-controller="Feedback" asp-action="Create">اضف رأيك</a>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link"
+                           asp-controller="Home"
+                           asp-action="HomePage"
+                           asp-fragment="appform">
+                            احجز موعدك الآن
+                        </a>
+                    </li>
+                </div>
+
+
+                <!-- الخدمات -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">خدماتنا</h5>
+                    <a class="footer-link" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a>
+                    <a class="footer-link" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a>
+                </div>
+
+                <!-- تواصل -->
+                <div class="col-lg-3 col-md-6 mb-4 text-center">
+
+                    <img src="~/images/logo.jpg" class="footer-logo mb-3" alt="شعار">
+                    <h5 class="footer-title mb-3">ابق على تواصل</h5>
+                    <div class="social-icons justify-content-center">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- حقوق -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        &copy; 2025 عيادة دكتور سمايل. جميع الحقوق محفوظة. |
+                        <a href="#" class="text-decoration-none text-secondary">سياسة الخصوصية</a> |
+                        <a href="#" class="text-decoration-none text-secondary">شروط الخدمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

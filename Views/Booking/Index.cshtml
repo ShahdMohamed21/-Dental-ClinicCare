@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "_FrontLayout";
+    ViewData["Title"] = "تأكيد الحجز";
+}
+
+<div class="confirmation-box text-center mx-auto col-md-6">
+
+    <h2 class="confirmation-title mb-4">
+        <i class="fas fa-check-circle text-success"></i>
+        تم تأكيد حجزك بنجاح
+    </h2>
+
+    <p><strong>الاسم:</strong> @TempData["PatientName"]</p>
+    <p><strong>تاريخ الموعد:</strong> @TempData["AppointmentDate"]</p>
+    <p><strong>وقت الموعد:</strong> @TempData["AppointmentTime"]</p>
+    <p><strong>ملاحظات:</strong> @TempData["Notes"]</p>
+
+    <hr>
+
+    <a asp-controller="Home" asp-action="HomePage" class="btn btn-primary mt-3" style="background-color: #003366; border-color: #003366; color: white;">
+        <i class="fas fa-calendar-plus"></i> حجز موعد آخر
+    </a>
+</div>

@@ -1,0 +1,82 @@
+﻿@model List<Final_project.Models.Service>
+
+@{
+    ViewData["Title"] = "Search Services";
+    Layout = "_Layout";
+}
+
+<h2 style="color:#003366;">Search Services by Name</h2>
+
+<form method="post" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="name" class="form-control" placeholder="Enter service name..."
+               value="@ViewBag.SearchTerm" required />
+        <button type="submit" class="btn" style="background-color:#003366; color:white;">Search</button>
+    </div>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <h4 style="color:#003366;">Results for: "@ViewBag.SearchTerm"</h4>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Service Name</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var service in Model)
+            {
+                <tr>
+                    <td>@service.Service_ID</td>
+                    <td>@service.Name</td>
+                    <td>@service.Price</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@service.Service_ID" class="btn btn-info btn-sm">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index" class="btn" style="border:2px solid #003366; color:#003366; background-color:white;">Back to All Services</a>
+
+<style>
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: white;
+    }
+
+        .table thead th {
+            background-color: #003366 !important;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e0f7fa !important;
+            transition: background-color 0.3s ease;
+        }
+
+    .btn-info {
+        background-color: white;
+        border: 2px solid #003366;
+        color: #003366;
+        transition: all 0.3s ease;
+    }
+
+        .btn-info:hover {
+            background-color: #4dd0e1;
+            color: white;
+        }
+</style>

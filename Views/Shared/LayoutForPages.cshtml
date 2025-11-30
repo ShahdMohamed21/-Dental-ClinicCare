@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - عيادة الأسنان</title>
+
+    @* 1. استدعاء الأصول المشتركة (CSS) *@
+
+    @* Bootstrap CSS *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    @* ملف الخطوط (مثل Cairo) إذا كنت لا تستخدمه في ملف CSS مخصص *@
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
+
+    @* ملفات CSS المخصصة (Custom Styles) لتصميم الموقع بالكامل (الـ Navbar، الـ Footer، الخ) *@
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @* هنا يمكن إضافة قسم Styles لـ Views التي تحتاج تنسيقات فريدة *@
+    @await RenderSectionAsync("Styles", required: false)
+    <style>
+        /* ضمان أن كل Toast له لون واضح */
+        #toast-container .toast {
+            opacity: 1 !important;
+            color: #fff !important;
+            direction: rtl;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* نجاح - أخضر */
+        #toast-container .toast-success {
+            background-color: #28a745 !important; /* أخضر */
+        }
+
+        /* حذف أو خطأ - أحمر */
+        #toast-container .toast-error {
+            background-color: #dc3545 !important; /* أحمر */
+        }
+
+        /* تعديل أو معلومة - أزرق */
+        #toast-container .toast-info {
+            background-color: #17a2b8 !important; /* أزرق */
+        }
+
+        /* تحذير - أصفر (لو حابب تستخدمه) */
+        #toast-container .toast-warning {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+    </style>
+</head>
+<body>
+
+    @* ========================================================
+       2. شريط التنقل (Navbar) الثابت
+       ======================================================== *@
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+        <div class="container-fluid custom-container">
+
+            @* اللوجو والرابط الرئيسي - باستخدام Tag Helpers لـ MVC *@
+            <a asp-area="" asp-controller="Home" asp-action="Index">
+                <img class="logo custom-logo" src="~/images/logo1.png" alt="شعار العيادة">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-color: white;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse custom-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav custom-nav me-auto">
+                    @* me-auto لـ RTL يضع الأزرار في اليسار *@
+
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="Index">الرئيسية</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        @* روابط الـ Anchor (#) في الـ Layout يجب أن تشير إلى الصفحة الرئيسية ثم الهاش *@
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="Index" href="#about">من نحن</a>
+                    </li>
+
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Consultation" asp-action="Index">استشارة اونلاين</a>
+                    </li>
+
+                    @* قائمة الخدمات المنسدلة (Dropdown) *@
+                    <li class="nav-item dropdown custom-item">
+                        <a class="nav-link dropdown-toggle custom-link" href="#service" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            خدماتنا
+                        </a>
+                        <ul class="dropdown-menu custom-dropdown">
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Hollywood">ابتسامة هوليود</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="DentalImplant">زراعة الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Orthodontics">تقويم الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="RootTreatment">علاج الجذور</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="ChildDental">أسنان الأطفال</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="GumTreatment">علاج اللثة</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="Whitening">تبييض الأسنان</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" asp-controller="Services" asp-action="CosmeticFillings">الحشوات التجميلية</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="Index" href="#cases-container">حالات قبل وبعد</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="Index" href="#carouselTestimonials">آراء العملاء</a>
+                    </li>
+              
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Packages" asp-action="Index">باكيدج</a>
+                    </li>
+                    <li class="nav-item custom-item">
+                        <a class="nav-link custom-link" asp-controller="Home" asp-action="Index" href="#appointmentForm">احجز موعدك الآن </a>
+                    </li>
+
+                    @* زر اللغة (EN) *@
+                    <button class="lang-btn ms-3" onclick="changeLang('ar')">EN</button>
+
+                    @* تضمين شريط تسجيل الدخول/الخروج المشروط (إذا قمت بإنشائه) *@
+                    <partial name="_LoginPartial" />
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @* ========================================================
+       3. محتوى الصفحة (Body Content)
+       ======================================================== *@
+
+    @* إضافة مسافة علوية لتجنب تغطية المحتوى بشريط التنقل الثابت *@
+    <div class="page-content" style="padding-top: 80px;">
+        <main role="main" class="pb-3">
+            @RenderBody() @* هذا هو المكان الذي سيظهر فيه محتوى الـ View الخاص بكل صفحة *@
+        </main>
+    </div>
+
+    @* ========================================================
+       4. ذيل الصفحة (Footer)
+       ======================================================== *@
+
+    @* يفضل وضع كود الـ Footer هنا ليكون مشتركاً *@
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - عيادة الأسنان - <a asp-area="" asp-controller="Home" asp-action="Privacy">سياسة الخصوصية</a>
+        </div>
+    </footer>
+
+    @* ========================================================
+       5. استدعاء السكربتات (JavaScript) في نهاية الـ Body
+       ======================================================== *@
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @* ملفات JS المخصصة (Custom Scripts) *@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* هنا يمكن إضافة قسم Scripts لـ Views التي تحتاج سكربتات خاصة بها (مثل Validation) *@
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            rtl: true,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            preventDuplicates: true
+        };
+
+        (function () {
+        @if (TempData["Success"] != null)
+        {
+                <text>toastr.success('@Html.Raw(TempData["Success"])'); </text>
+        }
+        @if (TempData["Error"] != null)
+        {
+                <text>toastr.error('@Html.Raw(TempData["Error"])'); </text>
+        }
+        @if (TempData["Delete"] != null)
+        {
+                <text>toastr.error('@Html.Raw(TempData["Delete"])'); </text>
+        }
+        @if (TempData["Info"] != null)
+        {
+                <text>toastr.info('@Html.Raw(TempData["Info"])'); </text>
+        }
+        @if (TempData["Warning"] != null)
+        {
+                <text>toastr.warning('@Html.Raw(TempData["Warning"])'); </text>
+        }
+            })();
+    </script>
+</body>
+</html>

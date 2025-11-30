@@ -1,0 +1,170 @@
+﻿@model List<Final_project.Models.Package>
+
+@{
+    ViewData["Title"] = "All Packages";
+    Layout = "_Layout";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a asp-action="Create" class="btn btn-success me-2 px-4">
+                <i class="fas fa-plus-circle me-1"></i> Add New Package
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive shadow-sm rounded-3 overflow-hidden">
+            <table class="styled-table table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pkg in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-muted">#@pkg.Package_ID</td>
+                            <td>@pkg.Name</td>
+                            <td>@pkg.Description</td>
+                            <td>@pkg.Price جنيه</td>
+                            <td class="action-buttons">
+                                <a asp-action="Details" asp-route-id="@pkg.Package_ID" class="icon-btn info">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@pkg.Package_ID" class="icon-btn edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@pkg.Package_ID" class="icon-btn delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-box-open display-1 text-muted mb-3"></i>
+            <h4 class="text-muted">No packages found.</h4>
+            <p class="text-muted">Start by adding a new package.</p>
+            <a asp-action="Create" class="btn btn-primary mt-2">Add Your First Package</a>
+        </div>
+    }
+</div>
+
+<style>
+    .styled-table {
+        min-width: 800px;
+        background: #fff;
+    }
+
+        .styled-table thead th {
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem;
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: rgba(30, 136, 229, 0.03);
+        }
+
+        .styled-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: .2s;
+        border: none;
+    }
+
+        .icon-btn.info {
+            background: #e3f2fd;
+            color: #1e88e5;
+        }
+
+            .icon-btn.info:hover {
+                background: #bbdefb;
+            }
+
+        .icon-btn.edit {
+            background: #fff8e1;
+            color: #ffb300;
+        }
+
+            .icon-btn.edit:hover {
+                background: #ffe082;
+            }
+
+        .icon-btn.delete {
+            background: #ffebee;
+            color: #e53935;
+        }
+
+            .icon-btn.delete:hover {
+                background: #ffcdd2;
+            }
+
+    /* Zebra Rows */
+    .styled-table tbody tr:nth-child(odd) {
+        background-color: #fafafa;
+    }
+
+    .styled-table tbody tr:nth-child(even) {
+        background-color: #f0f4f8;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-warning:hover,
+    .btn-outline-danger:hover {
+        transform: scale(1.05);
+    }
+</style>

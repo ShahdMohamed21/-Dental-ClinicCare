@@ -1,0 +1,45 @@
+﻿@model Final_project.Models.Staff
+
+@{
+    ViewData["Title"] = "Staff Details";
+    Layout = "_Layout";
+}
+
+<div class="staff-card d-flex align-items-center p-4 mb-4 rounded shadow-sm" style="background-color: #f0f4f8; border-left: 5px solid #003366;">
+    <!-- Avatar -->
+    <div class="me-4">
+        <img src="~/images/Image maker 2.jpg" alt="Staff Avatar" class="rounded-circle" style="width:80px; height:80px; object-fit:cover; border:2px solid #003366;">
+    </div>
+    <div>
+        <h4 class="fw-bold mb-2" style="color:#003366;">@Model.Name</h4>
+        <div class="mb-1"><strong>Phone:</strong> <span class="text-muted">@Model.Phone</span></div>
+   
+        <div class="mb-1"><strong>Address:</strong> <span class="text-muted">@Model.Address</span></div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left-circle"></i> Back to Staff List
+    </a>
+</div>
+
+<style>
+    .staff-card h4 {
+        margin-bottom: 0.5rem;
+    }
+
+    .staff-card img {
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .btn-outline-primary {
+        border-color: #003366;
+        color: #003366;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #003366;
+            color: #fff;
+        }
+</style>
